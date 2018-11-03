@@ -46,6 +46,8 @@ rm -f -r graudate
 git clone https://github.com/DONGHYEOK95/graudate.git
 cd graudate
 npm install
-npm install mecab-ffi
-node app.js
+npm install mecab-ya
+node_modules/mecab-ya/bin/install-mecab
+node_modules/mecab-ya/bin/install-mecab ko
+MECAB_LIB_PATH=/usr/local/lib/mecab node app.js
 */
