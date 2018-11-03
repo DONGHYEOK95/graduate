@@ -31,7 +31,7 @@ function jsonToString() {
   var i = 0;
 
   for (i=0;i<markets.length;i++) {
-    result += (i+1) + '. ' + markets[i].market_name + '(' + markets[i].market_tel + ')\n';
+    result += (i+1) + '. ' + markets[i].market_name + '\n(' + markets[i].market_tel + ')\n\n';
   }
 
   return result;
@@ -52,7 +52,7 @@ app.post('/message', function(req, res) {
           "width": 640,
           "height": 480
         },
-        "text": "[매장을 선택해 주세요]\n"+jsonToString(),
+        "text": "[매장을 선택해 주세요]\n\n"+jsonToString(),
         "keyboard": {
           "type": "text"
         }
