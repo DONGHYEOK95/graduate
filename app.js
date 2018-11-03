@@ -31,10 +31,29 @@ function jsonToString() {
   var i = 0;
 
   for (i=0;i<markets.length;i++) {
-    result += (i+1) + '. ' + markets[i].market_name + '(' + markets[i].market_tel + ')\n';
+    result += (i+1) + '. ' + markets[i].market_name + ' (' + markets[i].market_tel + ')\n';
   }
 
   return result;
+}
+
+function basicMenu() {
+    var answer = {
+      "message" : {
+        "text": "[메뉴를 선택해 주세요]"
+      },
+      "keyboard": {
+        "type": "buttons",
+        "buttons": [
+          "1. 매장선택",
+          "2. 메뉴선택",
+          "3, 주문하기",
+          "4. 주문확인"
+        ]
+      }
+    };
+
+    return answer;
 }
 
 app.post('/message', function(req, res) {
@@ -52,33 +71,34 @@ app.post('/message', function(req, res) {
           "width": 640,
           "height": 480
         },
-        "text": "[매장을 선택해 주세요]\n\n"+jsonToString(),
+        "text": "※ 매장을 선택해 주세요!\n\n"+jsonToString(),
         "keyboard": {
           "type": "text"
         }
       }
     };
   } else if (content == "2. 메뉴선택") {
-
+      answer = {
+        "message" : {
+          "photo": {
+            "url": "http://54.180.82.68:8080/images/img_2.jpg",
+            "width": 510,
+            "height": 700
+          },
+          "text": "※ 메뉴선택후, [선택완료] 를 입력해 주세요!\n\n"+jsonToString(),
+          "keyboard": {
+            "type": "text"
+          }
+        }
+      };
   } else if (content == "3. 주문하기") {
 
   } else if (content == "4. 주문확인") {
 
+  } else if (content == "[선택완료]" || content == "선택완료") {
+    answer = basicMenu();
   } else {
-    answer = {
-      "message" : {
-        "text": "[메뉴를 선택해 주세요]"
-      },
-      "keyboard": {
-        "type": "buttons",
-        "buttons": [
-          "1. 매장선택",
-          "2. 메뉴선택",
-          "3, 주문하기",
-          "4. 주문확인"
-        ]
-      }
-    };
+    answer = basicMenu();
   }
 
   res.send(answer);
