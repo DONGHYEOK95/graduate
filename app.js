@@ -1,4 +1,5 @@
 var express=require('express'); //express=nodejs서버를 구동시키기위한 명령
+var mecab = require('mecab-ffi'); //형태소 분석기 라이브러리.
 var app=express(); //app을 통해 express서버를 구동 app=서버
 var fs = require('fs');
 var bodyparser=require('body-parser'); //스트링을 데이터로 파싱
@@ -103,6 +104,9 @@ app.post('/message', function(req, res) {
     answer = basicMenu();
     menuState = 0;
   } else if (menuState == 2) {
+    mecab.parse(content, function(err,res) {
+      console.log(res);
+    });
     answer = {
       "message" : {
         "text": "※ 메뉴 수정 완료!",
