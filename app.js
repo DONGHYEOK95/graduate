@@ -102,6 +102,15 @@ app.post('/message', function(req, res) {
   } else if (menuState == 2 && (content == "[선택완료]" || content == "선택완료")) {
     answer = basicMenu();
     menuState = 0;
+  } else if (menuState == 2) {
+    answer = {
+      "message" : {
+        "text": "※ 메뉴 수정 완료!",
+        "keyboard": {
+          "type": "text"
+        }
+      }
+    };
   } else if(menuState == 1) {
     answer = basicMenu();
     menuState = 0;
