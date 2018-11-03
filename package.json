@@ -1,0 +1,22 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DONGHYEOK95/graudate.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DONGHYEOK95/graudate/issues"
+  },
+  "homepage": "https://github.com/DONGHYEOK95/graudate#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
