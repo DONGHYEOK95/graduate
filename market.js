@@ -1,7 +1,7 @@
 module.exports = function() {
   var market = [
     {
-      "market_name": "치킨나라 피자공주",
+      "market_name": "피나치공",
       "market_tel": "010-3192-8053"
       //another properties...
     },

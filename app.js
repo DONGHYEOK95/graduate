@@ -31,7 +31,7 @@ function jsonToString() {
   var i = 0;
 
   for (i=0;i<markets.length;i++) {
-    result += (i+1) + '. ' + markets[i].market_name + '\n(' + markets[i].market_tel + ')\n';
+    result += (i+1) + '. ' + markets[i].market_name + '(' + markets[i].market_tel + ')\n';
   }
 
   return result;
