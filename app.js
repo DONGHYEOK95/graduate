@@ -67,16 +67,16 @@ app.post('/message', function(req, res) {
   } else {
     answer = {
       "message" : {
-        "text": "[메뉴를 선택해 주세요]",
-        "keyboard": {
-          "type": "buttons",
-          "buttons": [
-            "1. 매장선택",
-            "2. 메뉴선택",
-            "3, 주문하기",
-            "4. 주문확인"
-          ]
-        }
+        "text": "[메뉴를 선택해 주세요]"
+      },
+      "keyboard": {
+        "type": "buttons",
+        "buttons": [
+          "1. 매장선택",
+          "2. 메뉴선택",
+          "3, 주문하기",
+          "4. 주문확인"
+        ]
       }
     };
   }
