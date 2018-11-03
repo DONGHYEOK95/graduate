@@ -31,7 +31,7 @@ function jsonToString() {
   var i = 0;
 
   for (i=0;i<markets.length;i++) {
-    result += (i+1) + '. ' + markets[i].market_name + '\n(' + markets[i].market_tel + ')\n\n';
+    result += (i+1) + '. ' + markets[i].market_name + '\n(' + markets[i].market_tel + ')\n';
   }
 
   return result;
@@ -67,6 +67,7 @@ app.post('/message', function(req, res) {
   } else {
     answer = {
       "message" : {
+        "text": "[메뉴를 선택해 주세요]",
         "keyboard": {
           "type": "buttons",
           "buttons": [
