@@ -107,10 +107,10 @@ app.post('/message', function(req, res) {
     menuState = 0;
     res.send(answer);
   } else if (menuState == 2) {
-    mecab.pos(content, function(err,res) {
+    mecab.pos(content, function(err,result) {
       answer = {
         "message" : {
-          "text": "※ 형태소 분석 결과\n" + res.toString(),
+          "text": "※ 형태소 분석 결과\n" + result.toString(),
           "keyboard": {
             "type": "text"
           }
