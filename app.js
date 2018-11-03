@@ -47,7 +47,11 @@ app.post('/message', function(req, res) {
   if (content == "1. 매장선택") {
     answer = {
       "message" : {
-        "photo": "http://54.180.82.68:8080/images/img_1.jpg",
+        "photo": {
+          "url": "http://54.180.82.68:8080/images/img_1.jpg",
+          "width": 640,
+          "height": 480
+        },
         "text": "[매장을 선택해 주세요]\n"+jsonToString(),
         "keyboard": {
           "type": "text"

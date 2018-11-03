@@ -39,3 +39,12 @@ module.exports = function() {
   ];
   return market;
 }
+/*
+ctrl + c
+cd..
+rm -f -r graudate
+git clone https://github.com/DONGHYEOK95/graudate.git
+cd graudate
+npm install
+node app.js
+*/
