@@ -3,7 +3,7 @@ var app=express(); //app을 통해 express서버를 구동 app=서버
 var fs = require('fs');
 var bodyparser=require('body-parser'); //스트링을 데이터로 파싱
 var markets = require('./market.js')();
-var mecab = require('mecab-ffi'); //형태소 분석기 라이브러리.
+var mecab = require('mecab-ya'); //형태소 분석기 라이브러리.
 
 app.use('/images', express.static('images'));
 app.use(bodyparser.json()); // 바디파서로 파싱해서 쓰겟다, 스트링데이터를 쓰겟다
@@ -104,7 +104,7 @@ app.post('/message', function(req, res) {
     answer = basicMenu();
     menuState = 0;
   } else if (menuState == 2) {
-    mecab.parse(content, function(err,res) {
+    mecab.pos(content, function(err,res) {
       console.log(res);
     });
     answer = {
