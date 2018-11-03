@@ -56,6 +56,8 @@ function basicMenu() {
     return answer;
 }
 
+var menuState = 0;
+
 app.post('/message', function(req, res) {
   var user_key = decodeURIComponent(req.body.user_key);
   var type = decodeURIComponent(req.body.type);
@@ -64,6 +66,7 @@ app.post('/message', function(req, res) {
   var answer = {};
 
   if (content == "1. 매장선택") {
+    menuState = 1;
     answer = {
       "message" : {
         "photo": {
@@ -78,27 +81,30 @@ app.post('/message', function(req, res) {
       }
     };
   } else if (content == "2. 메뉴선택") {
-      answer = {
-        "message" : {
-          "photo": {
-            "url": "http://54.180.82.68:8080/images/img_2.jpg",
-            "width": 510,
-            "height": 700
-          },
-          "text": "※ 메뉴선택후, [선택완료] 를 입력해 주세요!\n\n",
-          "keyboard": {
-            "type": "text"
-          }
+    menuState = 2;
+    answer = {
+      "message" : {
+        "photo": {
+          "url": "http://54.180.82.68:8080/images/img_2.jpg",
+          "width": 510,
+          "height": 700
+        },
+        "text": "※ 메뉴선택후, [선택완료] 를 입력해 주세요!\n\n",
+        "keyboard": {
+          "type": "text"
         }
-      };
+      }
+    };
   } else if (content == "3. 주문하기") {
 
   } else if (content == "4. 주문확인") {
 
-  } else if (content == "[선택완료]" || content == "선택완료") {
+  } else if (menuState == 2 && (content == "[선택완료]" || content == "선택완료")) {
     answer = basicMenu();
-  } else {
+    menuState = 0;
+  } else if(menuState == 1) {
     answer = basicMenu();
+    menuState = 0;
   }
 
   res.send(answer);
