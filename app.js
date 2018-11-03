@@ -85,7 +85,7 @@ app.post('/message', function(req, res) {
             "width": 510,
             "height": 700
           },
-          "text": "※ 메뉴선택후, [선택완료] 를 입력해 주세요!\n\n"+jsonToString(),
+          "text": "※ 메뉴선택후, [선택완료] 를 입력해 주세요!\n\n",
           "keyboard": {
             "type": "text"
           }
