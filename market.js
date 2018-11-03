@@ -49,5 +49,7 @@ npm install
 npm install mecab-ya
 node_modules/mecab-ya/bin/install-mecab
 node_modules/mecab-ya/bin/install-mecab ko
+
+MECAB_LIB_PATH=/usr/local/lib node index.js
 MECAB_LIB_PATH=/usr/local/lib/mecab node app.js
 */

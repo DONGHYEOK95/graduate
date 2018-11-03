@@ -81,6 +81,7 @@ app.post('/message', function(req, res) {
         }
       }
     };
+    res.send(answer);
   } else if (content == "2. 메뉴선택") {
     menuState = 2;
     answer = {
@@ -96,29 +97,30 @@ app.post('/message', function(req, res) {
         }
       }
     };
+    res.send(answer);
   } else if (content == "3. 주문하기") {
-
+    res.send(answer);
   } else if (content == "4. 주문확인") {
-
+    res.send(answer);
   } else if (menuState == 2 && (content == "[선택완료]" || content == "선택완료")) {
     answer = basicMenu();
     menuState = 0;
+    res.send(answer);
   } else if (menuState == 2) {
     mecab.pos(content, function(err,res) {
-      console.log(res);
-    });
-    answer = {
-      "message" : {
-        "text": "※ 메뉴 수정 완료!",
-        "keyboard": {
-          "type": "text"
+      answer = {
+        "message" : {
+          "text": "※ 형태소 분석 결과\n" + res.toString(),
+          "keyboard": {
+            "type": "text"
+          }
         }
-      }
-    };
+      };
+      res.send(answer);
+    });
   } else if(menuState == 1) {
     answer = basicMenu();
     menuState = 0;
+    res.send(answer);
   }
-
-  res.send(answer);
 });
