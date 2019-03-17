@@ -3,6 +3,7 @@ var mecab = require('mecab-ya'); //형태소 분석기 라이브러리.
 
 // 메뉴 선택 버튼 누름.
 // 피나치공으로 할게 ~~~
+// 메뉴선택
 
 mecab.pos('후라이드 치킨', function(err,result) {
   console.log(result);

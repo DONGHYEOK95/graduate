@@ -85,7 +85,7 @@ app.post('/message', function(req, res) {
   var content = decodeURIComponent(req.body.content);
 
   if(current_state == 0) {
-      current_state = 1;
+      current_state = 0.5;
       answer = {
         "message" : {
           "photo": {
@@ -99,6 +99,32 @@ app.post('/message', function(req, res) {
           }
         }
       };
+      console.log("------------------------------------------------------------------------");
+      console.log('USER_LOGIN : ', user_key);
+      res.send(answer);
+  } else if(current_state == 0.5) {
+      current_state = 1;
+      answer = {
+        "message" : {
+          "photo": {
+            "url": "http://54.180.82.68:8080/images/pina.jpg",
+            "width": 500,
+            "height": 400
+          },
+          "text": "※ 매장이 선택 되었습니다 : 피나치공",
+          "keyboard": {
+            "type": "buttons",
+            "buttons": [
+              "1. 매장선택",
+              "2. 메뉴선택",
+              "3. 주문하기",
+              "4. 주문확인"
+            ]
+          }
+        }
+      };
+      console.log("------------------------------------------------------------------------");
+      console.log('SELECT_MARKET : pinachigong');
       res.send(answer);
   } else if (current_state == 1) {
     // 피나치공
@@ -116,6 +142,8 @@ app.post('/message', function(req, res) {
         }
       }
     };
+    console.log("------------------------------------------------------------------------");
+    console.log('CHANGE_CURRENT_STATE { user : ',user_key,', state : SELECT_MENUES }');
     res.send(answer);
   } else if (current_state == 2) {
     // 후라이드 치킨
@@ -137,9 +165,16 @@ app.post('/message', function(req, res) {
       }
     };
 
+    console.log("------------------------------------------------------------------------");
+    console.log("Morphology Analyzing : " + beautyJSON(answer5) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
     answer = {
       "message" : {
-        "text": "※형태소 분석 결과 : " + beautyJSON(answer5) + '\n\n※의미분석 결과 : order('+beautyJSON(order)+')\n\n※result order\nmarket:' + beautyJSON(market),
+        "photo": {
+          "url": "http://54.180.82.68:8080/images/pina.jpg",
+          "width": 500,
+          "height": 400
+        },
+        "text": '※ 메뉴목록 : \n[ 후라이드치킨x1 ]',
         "keyboard": {
           "type": "text"
         }
@@ -167,9 +202,16 @@ app.post('/message', function(req, res) {
         }
       };
 
+      console.log("------------------------------------------------------------------------");
+      console.log("Morphology Analyzing : " + beautyJSON(answer4) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
       answer = {
         "message" : {
-          "text": "※형태소 분석 결과 : " + beautyJSON(answer4) + '\n\n※의미분석 결과 : order('+beautyJSON(order)+')\n\n※result order\nmarket:' + beautyJSON(market),
+          "photo": {
+            "url": "http://54.180.82.68:8080/images/pina.jpg",
+            "width": 500,
+            "height": 400
+          },
+          "text": '※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1 ]',
           "keyboard": {
             "type": "text"
           }
@@ -197,9 +239,16 @@ app.post('/message', function(req, res) {
       }
     };
 
+    console.log("------------------------------------------------------------------------");
+    console.log("Morphology Analyzing : " + beautyJSON(answer3) + '\n\nSemantic Analysis : undefined\n\nResult Order\nmarket:' + beautyJSON(market));
     answer = {
       "message" : {
-        "text": "※형태소 분석 결과 : " + beautyJSON(answer3) + '\n\n※의미분석 결과 : 의미를 분석하지 못하였습니다.\n\n※result order\nmarket:' + beautyJSON(market),
+        "photo": {
+          "url": "http://54.180.82.68:8080/images/pina.jpg",
+          "width": 500,
+          "height": 400
+        },
+        "text": '※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1 ]',
         "keyboard": {
           "type": "text"
         }
@@ -228,9 +277,16 @@ app.post('/message', function(req, res) {
       }
     };
 
+    console.log("------------------------------------------------------------------------");
+    console.log("Morphology Analyzing : " + beautyJSON(answer2) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
     answer = {
       "message" : {
-        "text": "※형태소 분석 결과 : " + beautyJSON(answer2) + '\n\n※의미분석 결과 : order('+beautyJSON(order)+')\n\n※result order\nmarket:' + beautyJSON(market),
+        "photo": {
+          "url": "http://54.180.82.68:8080/images/pina.jpg",
+          "width": 500,
+          "height": 400
+        },
+        "text": '※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x2 ]',
         "keyboard": {
           "type": "text"
         }
@@ -258,10 +314,16 @@ app.post('/message', function(req, res) {
 
       }
     };
-
+    console.log("------------------------------------------------------------------------");
+    console.log("Morphology Analyzing : " + beautyJSON(answer1) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
     answer = {
       "message" : {
-        "text": "※형태소 분석 결과 : " + beautyJSON(answer1) + '\n\n※의미분석 결과 : order('+beautyJSON(order)+')\n\n※result order\nmarket:' + beautyJSON(market),
+        "photo": {
+          "url": "http://54.180.82.68:8080/images/pina.jpg",
+          "width": 500,
+          "height": 400
+        },
+        "text": '※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]',
         "keyboard": {
           "type": "text"
         }
@@ -269,7 +331,7 @@ app.post('/message', function(req, res) {
     };
     res.send(answer);
   } else if (current_state == 7) {
-    // 주문하기
+    // 선택완료
     current_state = 8;
     var market = {
       pinachigong: {
@@ -287,18 +349,66 @@ app.post('/message', function(req, res) {
       }
     };
 
+    console.log("------------------------------------------------------------------------");
+    console.log("Order is done\n\nResult Order\nmarket:" + beautyJSON(market));
     answer = {
       "message" : {
-        "text": "※메뉴를 확인하시고 번호와, 위치를 적어주세요. \n\n※result order\nmarket:'" + beautyJSON(market),
+        "photo": {
+          "url": "http://54.180.82.68:8080/images/pina.jpg",
+          "width": 500,
+          "height": 400
+        },
+        "text": "※메뉴선택이 완료되었습니다.\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원",
+        "keyboard": {
+          "type": "buttons",
+          "buttons": [
+            "1. 매장선택",
+            "2. 메뉴선택",
+            "3. 주문하기",
+            "4. 주문확인"
+          ]
+        }
+      }
+    };
+    res.send(answer);
+  } else if(current_state == 8) {
+    // 주문하기
+    current_state = 9;
+    var market = {
+      pinachigong: {
+      }
+    };
+
+    market.pinachigong[user_key] = {
+      orders:{
+        friedChicken: 1,
+        coke: 1,
+        cass: 1
+      },
+      userData:{
+
+      }
+    };
+
+    console.log("------------------------------------------------------------------------");
+    console.log("Order is done\n\nResult Order\nmarket:" + beautyJSON(market));
+    answer = {
+      "message" : {
+        "photo": {
+          "url": "http://54.180.82.68:8080/images/pina.jpg",
+          "width": 500,
+          "height": 400
+        },
+        "text": "※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n번호와 주소를 기입해 주세요.",
         "keyboard": {
           "type": "text"
         }
       }
     };
     res.send(answer);
-  } else if (current_state == 8) {
+  } else if (current_state == 9) {
     // 번호는 01031928053이고 위치는 멀티관 502호로 가져다줘
-    current_state = 9;
+    current_state = 10;
     var market = {
       pinachigong: {
       }
@@ -321,18 +431,26 @@ app.post('/message', function(req, res) {
     setData[user_key].phone = '01020847405';
     setData[user_key].location = '멀티관 502';
 
+    console.log("------------------------------------------------------------------------");
+    console.log("Semantic Analysis : setData("+beautyJSON(setData)+")\n\nResult Order\nmarket:" + beautyJSON(market));
+
     answer = {
       "message" : {
-        "text": "※의미분석 결과 : setData("+beautyJSON(setData)+")\n※result order\nmarket:" + beautyJSON(market) + '\n위의 정보가 맞으시면 주문 완료라고 말해주세요.',
+        "photo": {
+          "url": "http://54.180.82.68:8080/images/pina.jpg",
+          "width": 500,
+          "height": 400
+        },
+        "text": "번호 : 01020847405\n위치 : 멀티관 502\n\n위의 정보가 맞으시면 주문 완료라고 말해주세요.",
         "keyboard": {
           "type": "text"
         }
       }
     };
     res.send(answer);
-  } else if(current_state == 9) {
+  } else if(current_state == 10) {
     // 번호는 01031928053이고 위치는 멀티관 502호로 가져다줘
-    current_state = 10;
+    current_state = 11;
     var market = {
       pinachigong: {
       }
@@ -350,9 +468,16 @@ app.post('/message', function(req, res) {
       }
     };
 
+    console.log("------------------------------------------------------------------------");
+    console.log("Accept Order : { \nmarket: pinachigong, \nuserid: " + user_key +"\nmarket:" + beautyJSON(market))+"}");
     answer = {
       "message" : {
-        "text": "※주문이 완료 되었습니다. \n※result order\nmarket:" + beautyJSON(market),
+        "photo": {
+          "url": "http://54.180.82.68:8080/images/pina.jpg",
+          "width": 500,
+          "height": 400
+        },
+        "text": "※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n\n※주문이 완료 되었습니다.",
         "keyboard": {
           "type": "buttons",
           "buttons": [
@@ -384,9 +509,17 @@ app.post('/message', function(req, res) {
       status: 'wait'
     };
 
+    console.log("------------------------------------------------------------------------");
+    console.log("Accept Order : { \nmarket: pinachigong, \nuserid: " + user_key +"\nmarket:" + beautyJSON(market))+"}");
+
     answer = {
       "message" : {
-        "text": "※주문현황 :" + beautyJSON(market),
+        "photo": {
+          "url": "http://54.180.82.68:8080/images/pina.jpg",
+          "width": 500,
+          "height": 400
+        },
+        "text": "※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n\n※주문이 완료 되었습니다.",
         "keyboard": {
           "type": "buttons",
           "buttons": [
