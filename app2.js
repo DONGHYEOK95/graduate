@@ -39,20 +39,16 @@ function jsonToString() {
 
 var current_state = 0;
 
-var answer1 = [
-  [ '맥주', 'NNG', '일반 명사'],
-  [ '1', 'SN', '숫자'],
-  [ '개', 'NNBC', '의존 명사'],
-  [ '빼', 'VV', '동사'],
-  [ '줘', 'EC+VV+EC' ]
-];
+var answer1 = [ [ '카스', 'NNP' ],
+  [ '1', 'SN' ],
+  [ '개', 'NNBC' ],
+  [ '빼', 'VV' ],
+  [ '줘', 'EC+VV+EC' ] ];
 
-var answer2 = [
-  [ '맥주', 'NNG', '일반 명사'],
-  [ '2', 'SN', '숫자'],
-  [ '개', 'NNBC', '의존 명사'],
-  [ '추가', 'NNG', '일반 명사']
-];
+var answer2 = [ [ '카스', 'NNP' ],
+  [ '2', 'SN' ],
+  [ '개', 'NNBC' ],
+  [ '추가', 'NNG' ] ];
 
 var answer3 = [
   [ '젓가락', 'NNG', '일반 명사'],
