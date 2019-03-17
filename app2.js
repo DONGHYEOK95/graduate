@@ -510,7 +510,7 @@ app.post('/message', function(req, res) {
     };
 
     console.log("------------------------------------------------------------------------");
-    console.log("Accept Order : { \nmarket: pinachigong, \nuserid: " + user_key +"\nmarket:" + beautyJSON(market))+"}");
+    console.log("Accept Order : { \nmarket: pinachigong, \nuserid: " + user_key +"\nmarket:" + beautyJSON(market)+"}");
 
     answer = {
       "message" : {
