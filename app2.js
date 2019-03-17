@@ -69,7 +69,7 @@ var answer4 = [
 var answer5 = [
   [ '후라이드', 'NNP', '고유 명사'],
   [ '치킨', 'NNG', '일반 명사']
-]
+];
 
 app.post('/message', function(req, res) {
   var user_key = decodeURIComponent(req.body.user_key);
@@ -125,7 +125,7 @@ app.post('/message', function(req, res) {
 
     answer = {
       "message" : {
-        "text": "형태소 분석 결과 : " + answer5 + '\n의미분석 결과 : order('+order+')\n result order\nmarket:' + market,
+        "text": "※형태소 분석 결과 : " + JSON.stringify(answer5) + '\n\n※의미분석 결과 : order('+JSON.stringify(order)+')\n\n※result order\nmarket:' + JSON.stringify(market),
         "keyboard": {
           "type": "text"
         }
