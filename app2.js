@@ -75,7 +75,7 @@ function beautyJSON(json) {
   var text = JSON.stringify(json);
   var jsonPretty
   try{
-    jsonPretty = JSON.stringify(text,null,2);
+    jsonPretty = JSON.stringify(JSON.parse(text),null,2);
   }catch (e) {
     return console.log(e);
   }
