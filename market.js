@@ -2,39 +2,24 @@ module.exports = function() {
   var market = [
     {
       "market_name": "피나치공",
-      "market_tel": "010-3192-8053"
+      "market_tel": "041-549-9227"
       //another properties...
     },
     {
-      "market_name": "마켓_2",
-      "market_tel": "010-2222-2222"
+      "market_name": "행복한돈까스",
+      "market_tel": "041-543-3102"
       //another properties...
     },
     {
-      "market_name": "마켓_3",
-      "market_tel": "010-3333-3333"
+      "market_name": "이화관",
+      "market_tel": "041-532-0070"
       //another properties...
     },
     {
-      "market_name": "마켓_4",
-      "market_tel": "010-4444-4444"
+      "market_name": "밀플랜비",
+      "market_tel": "010-3683-7555"
       //another properties...
-    },
-    {
-      "market_name": "마켓_5",
-      "market_tel": "010-5555-5555"
-      //another properties...
-    },
-    {
-      "market_name": "마켓_6",
-      "market_tel": "010-6666-6666"
-      //another properties...
-    },
-    {
-      "market_name": "마켓_7",
-      "market_tel": "010-7777-7777"
-      //another properties...
-    },
+    }
     //another markets...
   ];
   return market;
