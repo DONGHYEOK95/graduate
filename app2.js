@@ -38,6 +38,38 @@ function jsonToString() {
 }
 
 var current_state = 0;
+var answer1 = [
+  [ '맥주', 'NNG', '일반 명사'],
+  [ '2', 'SN', '숫자'],
+  [ '개', 'NNBC', '의존 명사'],
+  [ '추가', 'NNG', '일반 명사']
+];
+
+var answer2 = [
+  [ '맥주', 'NNG', '일반 명사'],
+  [ '1', 'SN', '숫자'],
+  [ '개', 'NNBC', '의존 명사'],
+  [ '빼', 'VV', '동사'],
+  [ '줘', 'EC+VV+EC' ]
+];
+
+var answer3 = [
+  [ '젓가락', 'NNG', '일반 명사'],
+  [ '많이', 'MAG', '일반 부사'],
+  [ '줘', 'VV+EC', '동사+연결 어미']
+];
+
+var answer4 = [
+  [ '콜라', 'NNG', '일반 명사'],
+  [ '추가', 'NNG', '일반 명사'],
+  [ '해', 'XSV+EC', '동사 파생 접미사+연결 어미'],
+  [ '줘', 'VX+EC', '보조 용언+연결 어미']
+];
+
+var answer5 = [
+  [ '후라이드', 'NNP', '고유 명사'],
+  [ '치킨', 'NNG', '일반 명사']
+]
 
 app.post('/message', function(req, res) {
   var user_key = decodeURIComponent(req.body.user_key);
@@ -70,7 +102,7 @@ app.post('/message', function(req, res) {
           "width": 620,
           "height": 519
         },
-        "text": "※ 메뉴선택후, [선택완료] 를 입력해 주세요!\n\n",
+        "text": "※ 메뉴를 선택해 주세요!\n\n",
         "keyboard": {
           "type": "text"
         }
@@ -78,6 +110,26 @@ app.post('/message', function(req, res) {
     };
     res.send(answer);
   } else if (current_state == 2) {
+    // 피나치공
+    current_state = 3;
+    var market = {
+      pinachigong: {
+    };
+    var order = {
+      coke: 1
+    };
+
+    market[user_key]['coke'] = 1;
+
+    answer = {
+      "message" : {
+        "text": "형태소 분석 결과 : " + answer5 + '\n의미분석 결과 : order('+order+')\n result order\nmarket:' + market,
+        "keyboard": {
+          "type": "text"
+        }
+      }
+    };
+    res.send(answer);
   } else if (current_state == 3) {
   } else if (current_state == 4) {
   } else if (current_state == 5) {
