@@ -39,16 +39,16 @@ function jsonToString() {
 
 var current_state = 0;
 
-var answer1 = [ [ '카스', 'NNP' ],
-  [ '1', 'SN' ],
-  [ '개', 'NNBC' ],
-  [ '빼', 'VV' ],
-  [ '줘', 'EC+VV+EC' ] ];
+var answer1 = [ [ '카스', 'NNP', '고유 명사'],
+  [ '1', 'SN', '숫자'],
+  [ '개', 'NNBC', '의존 명사'],
+  [ '빼', 'VV', '동사'],
+  [ '줘', 'EC+VV+EC', '연결 어미+동사+연결 어미'] ];
 
-var answer2 = [ [ '카스', 'NNP' ],
-  [ '2', 'SN' ],
-  [ '개', 'NNBC' ],
-  [ '추가', 'NNG' ] ];
+var answer2 = [ [ '카스', 'NNP', '고유 명사'],
+  [ '2', 'SN', '숫자'],
+  [ '개', 'NNBC', '의존 명사'],
+  [ '추가', 'NNG', '일반 명사'] ];
 
 var answer3 = [
   [ '젓가락', 'NNG', '일반 명사'],
@@ -136,7 +136,7 @@ app.post('/message', function(req, res) {
           "width": 620,
           "height": 519
         },
-        "text": "※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n"
+        "text": "※ 피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n"
       },
       "keyboard": {
         "type": "text"
@@ -166,7 +166,7 @@ app.post('/message', function(req, res) {
     };
 
     console.log("------------------------------------------------------------------------");
-    console.log("Morphology Analyzing : " + beautyJSON(answer5) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
+    console.log("Morphology Analysis : " + beautyJSON(answer5) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
     answer = {
       "message" : {
         "photo": {
@@ -174,7 +174,7 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": '※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n[ 후라이드치킨x1 ]'
+        "text": '※ 피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n후라이드치킨x1'
       },
       "keyboard": {
         "type": "text"
@@ -203,7 +203,7 @@ app.post('/message', function(req, res) {
       };
 
       console.log("------------------------------------------------------------------------");
-      console.log("Morphology Analyzing : " + beautyJSON(answer4) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
+      console.log("Morphology Analysis : " + beautyJSON(answer4) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
       answer = {
         "message" : {
           "photo": {
@@ -211,7 +211,7 @@ app.post('/message', function(req, res) {
             "width": 500,
             "height": 400
           },
-          "text": '※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1 ]'
+          "text": '※ 피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n후라이드치킨x1\n콜라x1'
         },
         "keyboard": {
           "type": "text"
@@ -240,7 +240,7 @@ app.post('/message', function(req, res) {
     };
 
     console.log("------------------------------------------------------------------------");
-    console.log("Morphology Analyzing : " + beautyJSON(answer3) + '\n\nSemantic Analysis : undefined\n\nResult Order\nmarket:' + beautyJSON(market));
+    console.log("Morphology Analysis : " + beautyJSON(answer3) + '\n\nSemantic Analysis : undefined\n\nResult Order\nmarket:' + beautyJSON(market));
     answer = {
       "message" : {
         "photo": {
@@ -248,7 +248,7 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": '※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1 ]'
+        "text": '※ 피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n후라이드치킨x1\n콜라x1'
       },
       "keyboard": {
         "type": "text"
@@ -278,7 +278,7 @@ app.post('/message', function(req, res) {
     };
 
     console.log("------------------------------------------------------------------------");
-    console.log("Morphology Analyzing : " + beautyJSON(answer2) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
+    console.log("Morphology Analysis : " + beautyJSON(answer2) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
     answer = {
       "message" : {
         "photo": {
@@ -286,7 +286,7 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": '※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x2 ]'
+        "text": '※ 피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n후라이드치킨x1\n콜라x1\n카스x2'
       },
       "keyboard": {
         "type": "text"
@@ -315,7 +315,7 @@ app.post('/message', function(req, res) {
       }
     };
     console.log("------------------------------------------------------------------------");
-    console.log("Morphology Analyzing : " + beautyJSON(answer1) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
+    console.log("Morphology Analysis : " + beautyJSON(answer1) + '\n\nSemantic Analysis : order('+beautyJSON(order)+')\n\nResult Order\nmarket:' + beautyJSON(market));
     answer = {
       "message" : {
         "photo": {
@@ -323,7 +323,7 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": '※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]'
+        "text": '※ 피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n후라이드치킨x1\n콜라x1\n카스x1'
       },
       "keyboard": {
         "type": "text"
@@ -358,7 +358,7 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": "※메뉴선택이 완료되었습니다.\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원"
+        "text": "※ 메뉴선택이 완료되었습니다.\n\n※ 메뉴목록 : \n후라이드치킨x1\n콜라x1\n카스x1\n\n총계 : 18,400원"
       },
       "keyboard": {
         "type": "buttons",
@@ -399,7 +399,7 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": "※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n번호와 주소를 기입해 주세요."
+        "text": "※ 메뉴목록 : \n후라이드치킨x1\n콜라x1\n카스x1\n\n총계 : 18,400원 입니다.\n번호와 주소를 기입해 주세요."
       },
       "keyboard": {
         "type": "text"
@@ -441,7 +441,7 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": "※ 사용자 정보 : \n번호 : 01020847405\n위치 : 멀티관 502\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원\n\n위의 정보가 맞으시면 주문 완료라고 말해주세요."
+        "text": "※ 사용자 정보 : \n번호 : 01020847405\n위치 : 멀티관 502\n※ 메뉴목록 : \n후라이드치킨x1\n콜라x1\n카스x1\n\n총계 : 18,400원\n\n위의 정보가 맞으시면 주문 완료라고 말해주세요."
       },
       "keyboard": {
         "type": "text"
@@ -477,7 +477,7 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": "※ 사용자 정보 : \n번호 : 01020847405\n위치 : 멀티관 502\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n\n※주문이 완료 되었습니다."
+        "text": "※ 사용자 정보 : \n번호 : 01020847405\n위치 : 멀티관 502\n※ 메뉴목록 : \n후라이드치킨x1\n콜라x1\n카스x1\n\n총계 : 18,400원 입니다.\n\n※ 주문이 완료 되었습니다."
       },
       "keyboard": {
         "type": "buttons",
@@ -510,7 +510,7 @@ app.post('/message', function(req, res) {
     };
 
     console.log("------------------------------------------------------------------------");
-    console.log("Accept Order : { \nmarket: pinachigong, \nuserid: " + user_key +"\nmarket:" + beautyJSON(market)+"}");
+    console.log("Show Order : { \nmarket: pinachigong, \nuserid: " + user_key +"\nmarket:" + beautyJSON(market)+"}");
 
     answer = {
       "message" : {
@@ -519,7 +519,7 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": "※ 사용자 정보 : \n번호 : 01020847405\n위치 : 멀티관 502\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n주문상황 : 대기 \n\n※주문이 완료 되었습니다."
+        "text": "※ 사용자 정보 : \n번호 : 01020847405\n위치 : 멀티관 502\n※ 메뉴목록 : \n후라이드치킨x1\n콜라x1\n카스x1\n\n총계 : 18,400원 입니다.\n주문상황 : 대기 \n\n※ 주문이 완료 되었습니다."
       },
       "keyboard": {
         "type": "buttons",

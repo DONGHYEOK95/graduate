@@ -1,3 +1,8 @@
+// cd /home
+// cd ubuntu
+// cd graudate
+// clear
+// node app2.js
 
 var mecab = require('mecab-ya'); //형태소 분석기 라이브러리.
 
