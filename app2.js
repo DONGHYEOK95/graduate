@@ -71,6 +71,11 @@ var answer5 = [
   [ '치킨', 'NNG', '일반 명사']
 ];
 
+function beautyJSON(json) {
+  var jsonPretty = JSON.stringify(JSON.parse(json),null,2);
+  return jsonPretty;
+}
+
 app.post('/message', function(req, res) {
   var user_key = decodeURIComponent(req.body.user_key);
   var type = decodeURIComponent(req.body.type);
@@ -110,8 +115,67 @@ app.post('/message', function(req, res) {
     };
     res.send(answer);
   } else if (current_state == 2) {
-    // 피나치공
+    // 후라이드 치킨
     current_state = 3;
+    var market = {
+      pinachigong: {
+      }
+    };
+    var order = {
+      friedChicken: 1
+    };
+
+    market.pinachigong[user_key] = {
+      orders:{
+        friedChicken: 1
+      },
+      userData:{
+
+      }
+    };
+
+    answer = {
+      "message" : {
+        "text": "※형태소 분석 결과 : " + beautyJSON(answer5) + '\n\n※의미분석 결과 : order('+beautyJSON(order)+')\n\n※result order\nmarket:' + beautyJSON(market),
+        "keyboard": {
+          "type": "text"
+        }
+      }
+    };
+    res.send(answer);
+  } else if (current_state == 3) {
+      // 콜라 추가해줘
+      current_state = 4;
+      var market = {
+        pinachigong: {
+        }
+      };
+      var order = {
+        coke: 1
+      };
+
+      market.pinachigong[user_key] = {
+        orders:{
+          friedChicken: 1,
+          coke: 1
+        },
+        userData:{
+
+        }
+      };
+
+      answer = {
+        "message" : {
+          "text": "※형태소 분석 결과 : " + beautyJSON(answer4) + '\n\n※의미분석 결과 : order('+beautyJSON(order)+')\n\n※result order\nmarket:' + beautyJSON(market),
+          "keyboard": {
+            "type": "text"
+          }
+        }
+      };
+      res.send(answer);
+  } else if (current_state == 4) {
+    // 젓가락 많이줘
+    current_state = 5;
     var market = {
       pinachigong: {
       }
@@ -120,32 +184,216 @@ app.post('/message', function(req, res) {
       coke: 1
     };
 
-    market.pinachigong[user_key] = {};
-    market.pinachigong[user_key].coke = 1;
+    market.pinachigong[user_key] = {
+      orders:{
+        friedChicken: 1,
+        coke: 1
+      },
+      userData:{
+
+      }
+    };
 
     answer = {
       "message" : {
-        "text": "※형태소 분석 결과 : " + JSON.stringify(answer5) + '\n\n※의미분석 결과 : order('+JSON.stringify(order)+')\n\n※result order\nmarket:' + JSON.stringify(market),
+        "text": "※형태소 분석 결과 : " + beautyJSON(answer3) + '\n\n※의미분석 결과 : 의미를 분석하지 못하였습니다.\n\n※result order\nmarket:' + beautyJSON(market),
         "keyboard": {
           "type": "text"
         }
       }
     };
     res.send(answer);
-  } else if (current_state == 3) {
-  } else if (current_state == 4) {
   } else if (current_state == 5) {
-  } else if (current_state == 6) {
-  } else if (current_state == 7) {
-  }
-
-  answer = {
-    "message" : {
-      "text": "※ 형태소 분석 결과\n" + result.toString(),
-      "keyboard": {
-        "type": "text"
+    // 카스 두개 추가해
+    current_state = 6;
+    var market = {
+      pinachigong: {
       }
+    };
+    var order = {
+      cass: 2
+    };
+
+    market.pinachigong[user_key] = {
+      orders:{
+        friedChicken: 1,
+        coke: 1,
+        cass: 2
+      },
+      userData:{
+
+      }
+    };
+
+    answer = {
+      "message" : {
+        "text": "※형태소 분석 결과 : " + beautyJSON(answer2) + '\n\n※의미분석 결과 : order('+beautyJSON(order)+')\n\n※result order\nmarket:' + beautyJSON(market),
+        "keyboard": {
+          "type": "text"
+        }
+      }
+    };
+    res.send(answer);
+  } else if (current_state == 6) {
+    // 맥주 한개 빼줘
+    current_state = 7;
+    var market = {
+      pinachigong: {
+      }
+    };
+    var order = {
+      cass: -1
+    };
+
+    market.pinachigong[user_key] = {
+      orders:{
+        friedChicken: 1,
+        coke: 1,
+        cass: 1
+      },
+      userData:{
+
+      }
+    };
+
+    answer = {
+      "message" : {
+        "text": "※형태소 분석 결과 : " + beautyJSON(answer1) + '\n\n※의미분석 결과 : order('+beautyJSON(order)+')\n\n※result order\nmarket:' + beautyJSON(market),
+        "keyboard": {
+          "type": "text"
+        }
+      }
+    };
+    res.send(answer);
+  } else if (current_state == 7) {
+    // 주문하기
+    current_state = 8;
+    var market = {
+      pinachigong: {
+      }
+    };
+
+    market.pinachigong[user_key] = {
+      orders:{
+        friedChicken: 1,
+        coke: 1,
+        cass: 1
+      },
+      userData:{
+
+      }
+    };
+
+    answer = {
+      "message" : {
+        "text": "※메뉴를 확인하시고 번호와, 위치를 적어주세요. \n\n※result order\nmarket:'" + beautyJSON(market),
+        "keyboard": {
+          "type": "text"
+        }
+      }
+    };
+    res.send(answer);
+  } else if (current_state == 8) {
+    // 번호는 01031928053이고 위치는 멀티관 502호로 가져다줘
+    current_state = 9;
+    var market = {
+      pinachigong: {
+      }
+    };
+
+    market.pinachigong[user_key] = {
+      orders:{
+        friedChicken: 1,
+        coke: 1,
+        cass: 1
+      },
+      userData:{
+        phone: '010-2084-7405',
+        location: '멀티관 502'
+      }
+    };
+    var setData = {
     }
-  };
-  res.send(answer);
+    setData[user_key].phone = '01020847405';
+    setData[user_key].location = '멀티관 502';
+
+    answer = {
+      "message" : {
+        "text": "※의미분석 결과 : setData("+beautyJSON(setData)+")\n※result order\nmarket:" + beautyJSON(market) + '\n위의 정보가 맞으시면 주문 완료라고 말해주세요.',
+        "keyboard": {
+          "type": "text"
+        }
+      }
+    };
+    res.send(answer);
+  } else if(current_state == 9) {
+    // 번호는 01031928053이고 위치는 멀티관 502호로 가져다줘
+    current_state = 10;
+    var market = {
+      pinachigong: {
+      }
+    };
+
+    market.pinachigong[user_key] = {
+      orders:{
+        friedChicken: 1,
+        coke: 1,
+        cass: 1
+      },
+      userData:{
+        phone: '010-2084-7405',
+        location: '멀티관 502'
+      }
+    };
+
+    answer = {
+      "message" : {
+        "text": "※주문이 완료 되었습니다. \n※result order\nmarket:" + beautyJSON(market),
+        "keyboard": {
+          "type": "buttons",
+          "buttons": [
+            "1. 매장선택",
+            "2. 메뉴선택",
+            "3. 주문하기",
+            "4. 주문확인"
+          ]
+        }
+      }
+    };
+    res.send(answer);
+  } else {
+    var market = {
+      pinachigong: {
+      }
+    };
+
+    market.pinachigong[user_key] = {
+      orders:{
+        friedChicken: 1,
+        coke: 1,
+        cass: 1
+      },
+      userData:{
+        phone: '010-2084-7405',
+        location: '멀티관 502'
+      },
+      status: 'wait'
+    };
+
+    answer = {
+      "message" : {
+        "text": "※주문현황 :" + beautyJSON(market),
+        "keyboard": {
+          "type": "buttons",
+          "buttons": [
+            "1. 매장선택",
+            "2. 메뉴선택",
+            "3. 주문하기",
+            "4. 주문확인"
+          ]
+        }
+      }
+    };
+    res.send(answer);
+  }
 });
