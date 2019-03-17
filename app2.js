@@ -114,6 +114,7 @@ app.post('/message', function(req, res) {
     current_state = 3;
     var market = {
       pinachigong: {
+      }
     };
     var order = {
       coke: 1
