@@ -38,19 +38,20 @@ function jsonToString() {
 }
 
 var current_state = 0;
-var answer1 = [
-  [ '맥주', 'NNG', '일반 명사'],
-  [ '2', 'SN', '숫자'],
-  [ '개', 'NNBC', '의존 명사'],
-  [ '추가', 'NNG', '일반 명사']
-];
 
-var answer2 = [
+var answer1 = [
   [ '맥주', 'NNG', '일반 명사'],
   [ '1', 'SN', '숫자'],
   [ '개', 'NNBC', '의존 명사'],
   [ '빼', 'VV', '동사'],
   [ '줘', 'EC+VV+EC' ]
+];
+
+var answer2 = [
+  [ '맥주', 'NNG', '일반 명사'],
+  [ '2', 'SN', '숫자'],
+  [ '개', 'NNBC', '의존 명사'],
+  [ '추가', 'NNG', '일반 명사']
 ];
 
 var answer3 = [
@@ -320,6 +321,7 @@ app.post('/message', function(req, res) {
     };
     var setData = {
     }
+    setData[user_key] = {};
     setData[user_key].phone = '01020847405';
     setData[user_key].location = '멀티관 502';
 
