@@ -120,7 +120,8 @@ app.post('/message', function(req, res) {
       coke: 1
     };
 
-    market[user_key]['coke'] = 1;
+    market[pinachigong][user_key] = {};
+    market[pinachigong][user_key].coke = 1;
 
     answer = {
       "message" : {
