@@ -72,7 +72,12 @@ var answer5 = [
 ];
 
 function beautyJSON(json) {
-  var jsonPretty = JSON.stringify(JSON.parse(json),null,2);
+  var jsonPretty
+  try{
+    jsonPretty = JSON.stringify(JSON.parse(json),null,2);
+  }catch (e) {
+    return console.log(e);
+  }
   return jsonPretty;
 }
 
