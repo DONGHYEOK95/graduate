@@ -102,7 +102,7 @@ app.post('/message', function(req, res) {
       console.log("------------------------------------------------------------------------");
       console.log('USER_LOGIN : ', user_key);
       res.send(answer);
-  } else if(current_state == 0.5) {
+  } else if(current_state <= 0.6) {
       current_state = 1;
       answer = {
         "message" : {
@@ -111,16 +111,16 @@ app.post('/message', function(req, res) {
             "width": 500,
             "height": 400
           },
-          "text": "※ 매장이 선택 되었습니다 : 피나치공",
-          "keyboard": {
-            "type": "buttons",
-            "buttons": [
-              "1. 매장선택",
-              "2. 메뉴선택",
-              "3. 주문하기",
-              "4. 주문확인"
-            ]
-          }
+          "text": "※ 매장이 선택 되었습니다 : 피나치공"
+        },
+        "keyboard": {
+          "type": "buttons",
+          "buttons": [
+            "1. 매장선택",
+            "2. 메뉴선택",
+            "3. 주문하기",
+            "4. 주문확인"
+          ]
         }
       };
       console.log("------------------------------------------------------------------------");
@@ -136,10 +136,10 @@ app.post('/message', function(req, res) {
           "width": 620,
           "height": 519
         },
-        "text": "※ 메뉴를 선택해 주세요!\n\n",
-        "keyboard": {
-          "type": "text"
-        }
+        "text": "※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n"
+      },
+      "keyboard": {
+        "type": "text"
       }
     };
     console.log("------------------------------------------------------------------------");
@@ -174,10 +174,10 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": '※ 메뉴목록 : \n[ 후라이드치킨x1 ]',
-        "keyboard": {
-          "type": "text"
-        }
+        "text": '※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n[ 후라이드치킨x1 ]'
+      },
+      "keyboard": {
+        "type": "text"
       }
     };
     res.send(answer);
@@ -211,10 +211,10 @@ app.post('/message', function(req, res) {
             "width": 500,
             "height": 400
           },
-          "text": '※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1 ]',
-          "keyboard": {
-            "type": "text"
-          }
+          "text": '※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1 ]'
+        },
+        "keyboard": {
+          "type": "text"
         }
       };
       res.send(answer);
@@ -248,10 +248,10 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": '※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1 ]',
-        "keyboard": {
-          "type": "text"
-        }
+        "text": '※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1 ]'
+      },
+      "keyboard": {
+        "type": "text"
       }
     };
     res.send(answer);
@@ -286,10 +286,10 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": '※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x2 ]',
-        "keyboard": {
-          "type": "text"
-        }
+        "text": '※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x2 ]'
+      },
+      "keyboard": {
+        "type": "text"
       }
     };
     res.send(answer);
@@ -323,10 +323,10 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": '※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]',
-        "keyboard": {
-          "type": "text"
-        }
+        "text": '※피자나라 치킨공주입니다.\n※ 메뉴를 선택해 주세요!\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]'
+      },
+      "keyboard": {
+        "type": "text"
       }
     };
     res.send(answer);
@@ -358,16 +358,16 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": "※메뉴선택이 완료되었습니다.\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원",
-        "keyboard": {
-          "type": "buttons",
-          "buttons": [
-            "1. 매장선택",
-            "2. 메뉴선택",
-            "3. 주문하기",
-            "4. 주문확인"
-          ]
-        }
+        "text": "※메뉴선택이 완료되었습니다.\n\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원"
+      },
+      "keyboard": {
+        "type": "buttons",
+        "buttons": [
+          "1. 매장선택",
+          "2. 메뉴선택",
+          "3. 주문하기",
+          "4. 주문확인"
+        ]
       }
     };
     res.send(answer);
@@ -399,10 +399,10 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": "※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n번호와 주소를 기입해 주세요.",
-        "keyboard": {
-          "type": "text"
-        }
+        "text": "※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n번호와 주소를 기입해 주세요."
+      },
+      "keyboard": {
+        "type": "text"
       }
     };
     res.send(answer);
@@ -441,10 +441,10 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": "번호 : 01020847405\n위치 : 멀티관 502\n\n위의 정보가 맞으시면 주문 완료라고 말해주세요.",
-        "keyboard": {
-          "type": "text"
-        }
+        "text": "※ 사용자 정보 : \n번호 : 01020847405\n위치 : 멀티관 502\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원\n\n위의 정보가 맞으시면 주문 완료라고 말해주세요."
+      },
+      "keyboard": {
+        "type": "text"
       }
     };
     res.send(answer);
@@ -477,16 +477,16 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": "※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n\n※주문이 완료 되었습니다.",
-        "keyboard": {
-          "type": "buttons",
-          "buttons": [
-            "1. 매장선택",
-            "2. 메뉴선택",
-            "3. 주문하기",
-            "4. 주문확인"
-          ]
-        }
+        "text": "※ 사용자 정보 : \n번호 : 01020847405\n위치 : 멀티관 502\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n\n※주문이 완료 되었습니다."
+      },
+      "keyboard": {
+        "type": "buttons",
+        "buttons": [
+          "1. 매장선택",
+          "2. 메뉴선택",
+          "3. 주문하기",
+          "4. 주문확인"
+        ]
       }
     };
     res.send(answer);
@@ -519,16 +519,16 @@ app.post('/message', function(req, res) {
           "width": 500,
           "height": 400
         },
-        "text": "※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n\n※주문이 완료 되었습니다.",
-        "keyboard": {
-          "type": "buttons",
-          "buttons": [
-            "1. 매장선택",
-            "2. 메뉴선택",
-            "3. 주문하기",
-            "4. 주문확인"
-          ]
-        }
+        "text": "※ 사용자 정보 : \n번호 : 01020847405\n위치 : 멀티관 502\n※ 메뉴목록 : \n[ 후라이드치킨x1, 콜라x1, 카스x1 ]\n총계 : 18,400원 입니다.\n주문상황 : 대기 \n\n※주문이 완료 되었습니다."
+      },
+      "keyboard": {
+        "type": "buttons",
+        "buttons": [
+          "1. 매장선택",
+          "2. 메뉴선택",
+          "3. 주문하기",
+          "4. 주문확인"
+        ]
       }
     };
     res.send(answer);
