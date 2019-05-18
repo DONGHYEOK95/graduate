@@ -122,10 +122,14 @@ app.post('/message', function(req, res) {
     var selectedHotdog = connection.query(`SELECT * FROM hotdog WHERE id=${selectedMenu.index}`);
     selectedHotdog = selectedHotdog[0]?selectedHotdog[0]:null;
 
-    user[user_key].lastMenu.detail = selectedHotdog.name;
-    user[user_key].lastMenu.price += selectedHotdog.price;
-    mainMenu(res, selectedHotdog.name + '메뉴가 추가되었습니다.' + selectedHotdog.price + '원');
-    user[user_key].status = STATUS.MAIN_MENU;
+    if (selectedMenu.simillarity > 0.35) {
+      user[user_key].lastMenu.detail = selectedHotdog.name;
+      user[user_key].lastMenu.price += selectedHotdog.price;
+      mainMenu(res, selectedHotdog.name + '메뉴가 추가되었습니다.' + selectedHotdog.price + '원');
+      user[user_key].status = STATUS.MAIN_MENU;
+    } else {
+      testMessage(res, '인식하지 못했습니다. 올바른 응답을 해주세요.');
+    }
   } else if(user[user_key].status == STATUS.SELECT_BURRITO_SPICY) {
     // 메뉴 추가.
     user[user_key].lastMenu.spicy = content;
@@ -138,10 +142,15 @@ app.post('/message', function(req, res) {
     var selectedBurrito = connection.query(`SELECT * FROM burrito WHERE id=${selectedMenu.index}`);
     selectedBurrito = selectedBurrito[0]?selectedBurrito[0]:null;
 
-    user[user_key].lastMenu.detail = selectedBurrito.name;
-    user[user_key].lastMenu.price += selectedBurrito.price;
-    testMessage(res, selectedBurrito.name + '메뉴가 추가되었습니다.' + selectedBurrito.price + '원');
-    user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
+
+    if (selectedMenu.simillarity > 0.35) {
+      user[user_key].lastMenu.detail = selectedBurrito.name;
+      user[user_key].lastMenu.price += selectedBurrito.price;
+      testMessage(res, selectedBurrito.name + '메뉴가 추가되었습니다.' + selectedBurrito.price + '원');
+      user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
+    } else {
+      testMessage(res, '인식하지 못했습니다. 올바른 응답을 해주세요.');
+    }
   } else if(user[user_key].status == STATUS.ADD_BURRITO_TOPPING) {
     var questions = connection.query(`SELECT * FROM question`);
     var answers = connection.query(`SELECT * FROM answer`);
@@ -149,7 +158,10 @@ app.post('/message', function(req, res) {
     var selectedMenu = findSentence(sentence,menus);
     var type = answers[selectedMenu.index].type;
 
-    if (type == MEAN.DONE) {
+
+    if (selectedMenu.simillarity < 0.35) {
+      testMessage(res, '인식하지 못했습니다. 올바른 응답을 해주세요.');
+    } else if (type == MEAN.DONE) {
       // 선택이 완료되었습니다.
       user[user_key].menus.push(user[user_key].lastMenu);
       user[user_key].price += user[user_key].lastMenu.price;
@@ -190,7 +202,9 @@ app.post('/message', function(req, res) {
     var selectedMenu = findSentence(sentence,menus);
     var type = answers[selectedMenu.index].type;
 
-    if (type == MEAN.DONE) {
+    if (selectedMenu.simillarity < 0.35) {
+      testMessage(res, '인식하지 못했습니다. 올바른 응답을 해주세요.');
+    } else if (type == MEAN.DONE) {
       // 선택이 완료되었습니다.
       user[user_key].status = STATUS.MAIN_MENU;
       mainMenu(res, '메뉴가 추가가 완료되었습니다.');
