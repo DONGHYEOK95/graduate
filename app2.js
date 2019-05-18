@@ -16,7 +16,6 @@ app.use(bodyparser.json()); // 바디파서로 파싱해서 쓰겟다, 스트링
 
 app.listen(8080, function(){ // node app.js 8080포트(임시)를 통해 서버 통신하겠다.
   console.log('server is running');
-  connection.connect();
 });
 
 app.get('/keyboard', function(req, res) { //데이터를 받는 양식 http메소드
@@ -34,8 +33,8 @@ app.post('/message', function(req, res) {
 
   var sentence = textToSentence(content);
 
-  connection.connect();
-  connection.query('SELECT * FROM count',function(err,query_res_1){
+  var count = connection.query('SELECT * FROM count');
+  console.log(count);
   //   console.log(query_res_1);
   //   var count =  query_res_1[0].question;
   //
@@ -59,8 +58,6 @@ app.post('/message', function(req, res) {
   //     });
   //   }
   // });
-  connection.end();
-});
 
 var MEAN = {
   ORDER: 1,
