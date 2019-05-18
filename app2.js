@@ -20,14 +20,14 @@ app.get('/keyboard', function(req, res) { //데이터를 받는 양식 http메�
 });
 
 app.post('/message', function(req, res) {
-  var userKey = decodeURIComponent(req.body.user_key);
+  var user_key = decodeURIComponent(req.body.user_key);
   var type = decodeURIComponent(req.body.type);
-  var text = decodeURIComponent(req.body.content);
-  console.log(text);
+  var content = decodeURIComponent(req.body.content);
+  console.log(content);
 
   var answer = {
     "message" : {
-      "text": textToSentence(text).toString(),
+      "text": textToSentence(content).toString(),
       "keyboard": {
         "type": "text"
       }
