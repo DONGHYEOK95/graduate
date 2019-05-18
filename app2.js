@@ -69,7 +69,7 @@ app.post('/message', function(req, res) {
 
   var isAgree = connection.query(`SELECT * FROM user WHERE userKey='${user_key}'`);
 
-  if (user[user_key] && user[user_key].status == STATUS.PRIVATE_INFO_AGREE_FLOW) {
+  if (!isAgree[0] && user[user_key] && user[user_key].status == STATUS.PRIVATE_INFO_AGREE_FLOW) {
     var info = privateInfo(content);
     connection.query(`INSERT INTO user VALUES ('${user_key}', '${info.name}', '${info.phone}', 'true')`);
     initUser(user_key);
