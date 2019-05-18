@@ -122,16 +122,27 @@ app.post('/message', function(req, res) {
     var selectedHotdog = connection.query(`SELECT * FROM hotdog WHERE id=${selectedMenu.index}`);
     selectedHotdog = selectedHotdog[0]?selectedHotdog[0]:null;
 
-    // 디테일한 맛 설정.
     user[user_key].lastMenu.detail = selectedHotdog.name;
-    console.log(selectedHotdog);
-    user[user_key].status = STATUS.MAIN_MENU;
+    console.log(user[user_key].lastMenu);
     testMessage(res, selectedHotdog.name + '메뉴가 추가되었습니다.' + selectedHotdog.price + '원');
+    user[user_key].status = STATUS.MAIN_MENU;
   } else if(user[user_key].status == STATUS.SELECT_BURRITO_SPICY) {
+    // 메뉴 추가.
     user[user_key].lastMenu.spicy = content;
+    console.log(user[user_key].lastMenu);
     testMessage(res, '디테일한 브리또를 설정해 주세요.');
     user[user_key].status = STATUS.ORDER_BURRITO;
-    // 선택이 완료되었습니다~
+  } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
+    var burritos = connection.query(`SELECT * FROM menus WHERE type='burrito'`);
+    var menus = getMenus(burritos);
+    var selectedMenu = findSentence(sentence,menus);
+    var selectedBurrito = connection.query(`SELECT * FROM burrito WHERE id=${selectedMenu.index}`);
+    selectedBurrito = selectedBurrito[0]?selectedBurrito[0]:null;
+
+    user[user_key].lastMenu.detail = selectedBurrito.name;
+    console.log(user[user_key].lastMenu);
+    testMessage(res, selectedBurrito.name + '메뉴가 추가되었습니다.' + selectedBurrito.price + '원');
+    user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
   } else if(user[user_key].status == STATUS.ADD_BURRITO_TOPPING) {
     // 의도분석.
     if (false) {
@@ -158,11 +169,6 @@ app.post('/message', function(req, res) {
     testMessage(res, 'ORDER_SIDE_MENU');
   } else if(user[user_key].status == STATUS.ORDER_DONE) {
     testMessage(res, 'ORDER_DONE');
-  } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
-    // 디테일한 맛 설정.
-    user[user_key].lastMenu.detail = '디테일한 브리또 명칭';
-    user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
-      testMessage(res, 'SELECT_BURRITO_SPICY');
   }
 });
 
