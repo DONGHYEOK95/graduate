@@ -54,12 +54,12 @@ app.post('/message', function(req, res) {
               }
             };
             res.send(answer);
-            connection.end();
           });
         }
       });
     }
   });
+  connection.end();
 });
 
 var MEAN = {
