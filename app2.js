@@ -132,7 +132,8 @@ app.post('/message', function(req, res) {
   } else if(user[user_key].status == STATUS.SELECT_BURRITO_SPICY) {
     user[user_key].lastMenu.spicy = content;
     testMessage(res, '디테일한 브리또를 설정해 주세요.');
-    user[user_key].status = STATUS.ORDER_BURRITO;~
+    user[user_key].status = STATUS.ORDER_BURRITO;
+    // 선택이 완료되었습니다~
   } else if(user[user_key].status == STATUS.ADD_BURRITO_TOPPING) {
     // 의도분석.
     if (false) {
