@@ -77,7 +77,7 @@ function menuExtractor(sentence) {
   // 여기가 좀 빡세네.. 문장에서 메뉴, 갯수를 추출해야 한다.
 
   return {
-    menu: ,
+    menu: 1,
     ea: 1,
     success: true | false
   };
