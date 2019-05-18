@@ -147,18 +147,6 @@ app.post('/message', function(req, res) {
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
     }
   }
-
-
-  var answer = {
-    "message" : {
-      "text": "default",
-      "keyboard": {
-        "type": "text"
-      }
-    }
-  };
-
-  res.send(answer);
 });
 
 function selectMainMenu(res) {
