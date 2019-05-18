@@ -172,6 +172,7 @@ app.post('/message', function(req, res) {
       var toppingSentence = findSentence(sentence,sentences);
       var selectedTopping = connection.query(`SELECT * FROM topping WHERE id=${toppingSentence.index}`);
       selectedTopping = selectedTopping[0]?selectedTopping[0]:null;
+      console.log(sentence);
 
       user[user_key].lastMenu.topping.push(selectedTopping.name);
       user[user_key].lastMenu.price += selectedTopping.price;
