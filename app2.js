@@ -39,6 +39,7 @@ app.post('/message', function(req, res) {
 
   var sentence = textToSentence(content);
 
+  connection.connect();
   connection.query('SELECT * FROM count',function(err,query_res_1){
     console.log(query_res_1);
     var count =  query_res_1[0].question;
