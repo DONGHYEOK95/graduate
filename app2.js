@@ -90,7 +90,6 @@ app.post('/message', function(req, res) {
         spicy: '',
         detail: '',
         topping: [],
-        side: [],
         price: 0
       };
       selectMainMenu(res);
@@ -152,6 +151,8 @@ app.post('/message', function(req, res) {
 
     if (type == MEAN.DONE) {
       // 선택이 완료되었습니다.
+      user[user_key].menus.push(user[user_key].lastMenu);
+      user[user_key].price += user[user_key].lastMenu.price;
       user[user_key].status = STATUS.MAIN_MENU;
       mainMenu(res, '메뉴가 추가가 완료되었습니다.');
     } else if (type == MEAN.DELETE) {
@@ -200,13 +201,13 @@ app.post('/message', function(req, res) {
       var selectedSide = connection.query(`SELECT * FROM side WHERE id=${sideSentence.index}`);
       selectedSide = selectedSide[0]?selectedSide[0]:null;
 
-      if (user[user_key].lastMenu.side.indexOf(selectedSide.name)>=0) {
-        user[user_key].lastMenu.side.splice(user[user_key].lastMenu.side.indexOf(selectedSide.name), 1);
-        user[user_key].lastMenu.price -= selectedSide.price;
+      if (user[user_key].side.indexOf(selectedSide.name)>=0) {
+        user[user_key].side.splice(user[user_key].side.indexOf(selectedSide.name), 1);
+        user[user_key].price -= selectedSide.price;
       }
       user[user_key].status = STATUS.ORDER_SIDE_MENU;
       testMessage(res, '사이드 제거');
-      console.log(user[user_key].lastMenu);
+      console.log(user[user_key]);
     } else if (type == MEAN.ORDER) {
       var sides = connection.query(`SELECT * FROM menus WHERE type='side'`);
       var sentences = getMenus(sides);
@@ -214,11 +215,11 @@ app.post('/message', function(req, res) {
       var selectedSide = connection.query(`SELECT * FROM side WHERE id=${sideSentence.index}`);
       selectedSide = selectedSide[0]?selectedSide[0]:null;
 
-      user[user_key].lastMenu.push(selectedSide.name);
-      user[user_key].lastMenu.price += selectedSide.price;
+      user[user_key].side.push(selectedSide.name);
+      user[user_key].price += selectedSide.price;
       user[user_key].status = STATUS.ORDER_SIDE_MENU;
       testMessage(res, '사이드 추가');
-      console.log(user[user_key].lastMenu);
+      console.log(user[user_key]);
     }
   } else if(user[user_key].status == STATUS.ORDER_DONE) {
     testMessage(res, 'ORDER_DONE');
@@ -379,7 +380,11 @@ function initUser(user_key) {
     user[user_key] = {
       status: STATUS.MAIN_MENU,
       menus: [
-      ]
+      ],
+      side: [
+
+      ],
+      price: 0
     }
   }
 }
