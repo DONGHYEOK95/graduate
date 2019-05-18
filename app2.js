@@ -3,6 +3,14 @@ var app=express(); //app을 통해 express서버를 구동 app=서버
 var fs = require('fs');
 var bodyparser=require('body-parser'); //스트링을 데이터로 파싱
 var mecab = require('mecab-ffi'); //형태소 분석기 라이브러리.
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '1234',
+  port     : 3306,
+  database : 'graduate'
+});
 
 app.use('/images', express.static('images'));
 app.use(bodyparser.json()); // 바디파서로 파싱해서 쓰겟다, 스트링데이터를 쓰겟다
@@ -23,17 +31,34 @@ app.post('/message', function(req, res) {
   var user_key = decodeURIComponent(req.body.user_key);
   var type = decodeURIComponent(req.body.type);
   var content = decodeURIComponent(req.body.content);
-  console.log(content);
 
-  var answer = {
-    "message" : {
-      "text": textToSentence(content).toString(),
-      "keyboard": {
-        "type": "text"
-      }
+  var sentence = textToSentence(content);
+
+  connection.connect();
+  connection.query('SELECT * FROM count',function(err,query_res_1){
+    var count =  query_res[0].question;
+
+    for (var i=0;i<sentence.length; i++) {
+      connection.query(`INSERT INTO question(qid, index, text) VALUES (${count}, ${i}, ${sentence[i]})`, function(err, query_res_2) {
+        if (i == sentence.length-1) {
+          connection.query(`UPDATE count SET question = ${count+1}`), function(err, query_res_3) {
+            console.log('update is done');
+
+            var answer = {
+              "message" : {
+                "text": sentence.toString(),
+                "keyboard": {
+                  "type": "text"
+                }
+              }
+            };
+            res.send(answer);
+          });
+        }
+      });
     }
-  };
-  res.send(answer);
+  });
+  connection.end();
 });
 
 var MEAN = {
