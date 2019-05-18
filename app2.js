@@ -133,7 +133,7 @@ app.post('/message', function(req, res) {
     testMessage(res, '디테일한 브리또를 설정해 주세요.');
     user[user_key].status = STATUS.ORDER_BURRITO;
   } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
-    var class = connection.query(`SELECT * FROM menus WHERE type='burrito'`);
+    var burritos = connection.query(`SELECT * FROM menus WHERE type='burrito'`);
     var menus = getMenus(burritos);
     console.log(menus);
     var selectedMenu = findSentence(sentence,menus);
