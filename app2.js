@@ -51,7 +51,7 @@ app.get('/keyboard', function(req, res) { //데이터를 받는 양식 http메�
   var user_key = decodeURIComponent(req.body.user_key);
   var isAgree = connection.query(`SELECT * FROM user WHERE userKey=${user_key}`);
 
-  if (isAgree && isAgree[0] && isAgree[0].agree && isAgree[0].agree == 'true') {
+  if (!isAgree[0] || isAgree && isAgree[0] && isAgree[0].agree !== 'true') {
     initUser(user_key);
     mainMenu(res);
   } else {
@@ -74,7 +74,7 @@ app.post('/message', function(req, res) {
     connection.query(`INSERT INTO user VALUES (${user_key}, ${name}, ${phone}, 'true')`);
     initUser(user_key);
     mainMenu(res);
-  } else if (isAgree && isAgree[0] && isAgree[0].agree && isAgree[0].agree == 'true') {
+  } else if (!isAgree[0] || isAgree && isAgree[0] && isAgree[0].agree !== 'true') {
     if (content == '개인정보 이용 동의') {
       agree(user_key, res);
     } else {
