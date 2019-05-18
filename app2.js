@@ -23,8 +23,9 @@ app.post('/message', function(req, res) {
   var userKey = decodeURIComponent(req.body.user_key);
   var type = decodeURIComponent(req.body.type);
   var text = decodeURIComponent(req.body.content);
+  console.log(text);
 
-  answer = {
+  var answer = {
     "message" : {
       "text": textToSentence(text).toString(),
       "keyboard": {
