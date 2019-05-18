@@ -49,7 +49,7 @@ app.listen(8080, function(){ // node app.js 8080포트(임시)를 통해 서버 
 
 app.get('/keyboard', function(req, res) { //데이터를 받는 양식 http메소드
   var user_key = decodeURIComponent(req.body.user_key);
-  var isAgree = connection.query(`SELECT * FROM user WHERE userKey=${user_key}`);
+  var isAgree = connection.query(`SELECT * FROM user WHERE userKey='${user_key}'`);
 
   if (!isAgree[0] || isAgree && isAgree[0] && isAgree[0].agree !== 'true') {
     initUser(user_key);
