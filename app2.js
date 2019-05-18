@@ -123,9 +123,10 @@ app.post('/message', function(req, res) {
     selectedHotdog = selectedHotdog[0]?selectedHotdog[0]:null;
 
     if (selectedMenu.simillarity > 0.35) {
+      user[user_key].menus.push(user[user_key].lastMenu);
       user[user_key].lastMenu.detail = selectedHotdog.name;
       user[user_key].lastMenu.price += selectedHotdog.price;
-      mainMenu(res, selectedHotdog.name + '메뉴가 추가되었습니다.' + selectedHotdog.price + '원');
+      testMessage(res, jsonToString(user[user_key].menus) + '\n' + jsonToString(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
       user[user_key].status = STATUS.MAIN_MENU;
     } else {
       testMessage(res, '인식하지 못했습니다. 올바른 응답을 해주세요.');
@@ -146,7 +147,7 @@ app.post('/message', function(req, res) {
     if (selectedMenu.simillarity > 0.35) {
       user[user_key].lastMenu.detail = selectedBurrito.name;
       user[user_key].lastMenu.price += selectedBurrito.price;
-      testMessage(res, selectedBurrito.name + '메뉴가 추가되었습니다.' + selectedBurrito.price + '원');
+      testMessage(res, jsonToString(user[user_key].menus) + '\n' + jsonToString(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
     } else {
       testMessage(res, '인식하지 못했습니다. 올바른 응답을 해주세요.');
@@ -166,7 +167,7 @@ app.post('/message', function(req, res) {
       user[user_key].menus.push(user[user_key].lastMenu);
       user[user_key].price += user[user_key].lastMenu.price;
       user[user_key].status = STATUS.MAIN_MENU;
-      mainMenu(res, '메뉴가 추가가 완료되었습니다.');
+      mainMenu(res, jsonToString(user[user_key].menus) + '\n' + jsonToString(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
     } else if (type == MEAN.DELETE) {
       var toppings = connection.query(`SELECT * FROM menus WHERE type='topping'`);
       var sentences = getMenus(toppings);
@@ -179,7 +180,7 @@ app.post('/message', function(req, res) {
         user[user_key].lastMenu.price -= selectedTopping.price;
       }
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
-      testMessage(res, '토핑 제거');
+      testMessage(res, jsonToString(user[user_key].menus) + '\n' + jsonToString(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
       console.log(user[user_key].lastMenu);
     } else if(type == MEAN.ORDER) {
       var toppings = connection.query(`SELECT * FROM menus WHERE type='topping'`);
@@ -192,7 +193,7 @@ app.post('/message', function(req, res) {
       user[user_key].lastMenu.topping.push(selectedTopping.name);
       user[user_key].lastMenu.price += selectedTopping.price;
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
-      testMessage(res, '토핑 추가');
+      testMessage(res, jsonToString(user[user_key].menus) + '\n' + jsonToString(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
       console.log(user[user_key].lastMenu);
     }
   } else if(user[user_key].status == STATUS.ORDER_SIDE_MENU) {
@@ -207,7 +208,7 @@ app.post('/message', function(req, res) {
     } else if (type == MEAN.DONE) {
       // 선택이 완료되었습니다.
       user[user_key].status = STATUS.MAIN_MENU;
-      mainMenu(res, '메뉴가 추가가 완료되었습니다.');
+      mainMenu(res, jsonToString(user[user_key].menus) + '\n' + jsonToString(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
     } else if (type == MEAN.DELETE) {
       var sides = connection.query(`SELECT * FROM menus WHERE type='side'`);
       var sentences = getMenus(sides);
@@ -220,8 +221,7 @@ app.post('/message', function(req, res) {
         user[user_key].price -= selectedSide.price;
       }
       user[user_key].status = STATUS.ORDER_SIDE_MENU;
-      testMessage(res, '사이드 제거');
-      console.log(user[user_key]);
+      testMessage(res, jsonToString(user[user_key].menus) + '\n' + jsonToString(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
     } else if (type == MEAN.ORDER) {
       var sides = connection.query(`SELECT * FROM menus WHERE type='side'`);
       var sentences = getMenus(sides);
@@ -232,11 +232,10 @@ app.post('/message', function(req, res) {
       user[user_key].side.push(selectedSide.name);
       user[user_key].price += selectedSide.price;
       user[user_key].status = STATUS.ORDER_SIDE_MENU;
-      testMessage(res, '사이드 추가');
-      console.log(user[user_key]);
+      testMessage(res, jsonToString(user[user_key].menus) + '\n' + jsonToString(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
     }
   } else if(user[user_key].status == STATUS.ORDER_DONE) {
-    testMessage(res, 'ORDER_DONE');
+    testMessage(res, jsonToString(user[user_key].menus) + '\n' + jsonToString(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
   }
 });
 
