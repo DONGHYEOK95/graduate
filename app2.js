@@ -266,8 +266,8 @@ function getStringMenu(user_key) {
     if (user[user_key].menus.length > 0) {
       result += '-------------------------\n'
       result += '※ 주문목록\n'
-      user[user_key].menus.forEach((menu) => {
-        result += `${menu.main}\n${menu.detail}-${menu.spicy}\n`;
+      user[user_key].menus.forEach((menu, index) => {
+        result += `${index+1}. ${menu.main}\n${menu.detail}-${menu.spicy}\n`;
 
         if(menu.topping.length>0) {
           result += '[ ';
