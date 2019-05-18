@@ -259,7 +259,8 @@ function getStringMenu(user_key) {
   var result = '';
   if(user[user_key]) {
     if (user[user_key].menus.length > 0) {
-      result += '※ 메인메뉴\n'
+      result += '-------------------------\n'
+      result += '※ 주문목록\n'
       user[user_key].menus.forEach((menu) => {
         result += `${menu.detail}(${menu.spicy})`;
 
@@ -291,7 +292,8 @@ function getStringMenu(user_key) {
     }
 
     if(result !== '') {
-      result += '\n' + user[user_key].price + '원';
+      result += '\n합계 : ' + user[user_key].price + '원\n';
+      result += '-------------------------'
     }
   }
 
