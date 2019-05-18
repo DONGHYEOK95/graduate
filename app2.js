@@ -124,7 +124,8 @@ app.post('/message', function(req, res) {
 
     if (selectedMenu.simillarity > 0.35) {
       user[user_key].lastMenu.detail = selectedHotdog.name;
-      user[user_key].price += selectedHotdog.price;
+      user[user_key].lastMenu.price += selectedHotdog.price;
+      user[user_key].price += user[user_key].lastMenu.price;
       user[user_key].menus.push(user[user_key].lastMenu);
       mainMenu(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
       user[user_key].status = STATUS.MAIN_MENU;
