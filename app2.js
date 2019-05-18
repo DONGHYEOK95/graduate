@@ -5,7 +5,7 @@ var bodyparser=require('body-parser'); //스트링을 데이터로 파싱
 var mecab = require('mecab-ffi'); //형태소 분석기 라이브러리.
 var mysql      = require('sync-mysql');
 var connection = new mysql({
-  host     : 'ec2-54-180-82-68.ap-northeast-2.compute.amazonaws.com:3306',
+  host     : 'ec2-54-180-82-68.ap-northeast-2.compute.amazonaws.com',
   user     : 'root',
   password : '1234',
   database : 'graduate'
