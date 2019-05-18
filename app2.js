@@ -103,11 +103,11 @@ function isDone(sentence) {
 function textToSentence(content) {
   var sentence = [];
 
-  mecab.parse(content, function(err,result) {
-    for (var i=0; i<result.length; i++) {
-      sentence.push(result[i][0]);
-    }
-  });
+  var result = mecab.parseSync(content);
+
+  for (var i=0; i<result.length; i++) {
+    sentence.push(result[i][0]);
+  }
 
   return sentence;
 }
