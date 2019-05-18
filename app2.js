@@ -11,6 +11,35 @@ var connection = new mysql({
   database : 'graduate'
 });
 
+var user = {};
+
+var MEAN = {
+  ORDER: 1,
+  DONE: 2,
+  DELETE: 3
+};
+
+var COMMAND = {
+  order: MEAN.ORDER,
+  done: MEAN.DONE,
+  delete: MEAN.DELETE
+};
+
+var STATUS = {
+  MAIN_MENU: 0,
+  PRIVATE_INFO_AGREE_FLOW: 1,
+  ORDER_MAIN_MENU: 2,
+  ORDER_SIDE_MENU: 3,
+  MAIN_MENU_SELECT_DONE: 4,
+  SIDE_MENU_SELECT_DONE: 5,
+  ORDER_DONE: 6,
+  ORDER_HOTDOG: 7,
+  ORDER_BURRITO: 8,
+  SELECT_BURRITO_SPICY: 9,
+  SELECT_HOTDOG_SPICY: 10,
+  ADD_BURRITO_TOPPING: 11
+};
+
 app.use('/images', express.static('images'));
 app.use(bodyparser.json()); // 바디파서로 파싱해서 쓰겟다, 스트링데이터를 쓰겟다
 
@@ -19,11 +48,15 @@ app.listen(8080, function(){ // node app.js 8080포트(임시)를 통해 서버 
 });
 
 app.get('/keyboard', function(req, res) { //데이터를 받는 양식 http메소드
-  var keyboard={
-    "type": "text"
-  };
+  var user_key = decodeURIComponent(req.body.user_key);
+  var isAgree = connection.query(`SELECT * FROM user WHERE userKey=${user_key}`);
 
-  res.send(keyboard);
+  if (isAgree && isAgree[0] && isAgree[0].agree && isAgree[0].agree == 'true') {
+    initUser(user_key);
+    mainMenu(res);
+  } else {
+    agreePrivateInfoUse(res);
+  }
 });
 
 app.post('/message', function(req, res) {
@@ -34,14 +67,91 @@ app.post('/message', function(req, res) {
   var sentence = textToSentence(content);
   var count = connection.query(`SELECT * FROM count`)[0].question;
 
-  for (var i=0;i<sentence.length; i++) {
-    connection.query(`INSERT INTO question VALUES (${count}, ${i}, '${sentence[i]}')`);
+  var isAgree = connection.query(`SELECT * FROM user WHERE userKey=${user_key}`);
+
+  if (user[user_key] && user[user_key].status == STATUS.PRIVATE_INFO_AGREE_FLOW) {
+    // name, 폰번호를 추출하는 함수를 만들어야 한다.
+    connection.query(`INSERT INTO user VALUES (${user_key}, ${name}, ${phone}, 'true')`);
+    initUser(user_key);
+    mainMenu(res);
+  } else if (isAgree && isAgree[0] && isAgree[0].agree && isAgree[0].agree == 'true') {
+    if (content == '개인정보 이용 동의') {
+      agree(user_key, res);
+    } else {
+      agreePrivateInfoUse(res);
+    }
+  } else if(user[user_key].status == STATUS.MAIN_MENU) {
+    if (content == "1. 메뉴 주문하기") {
+      user[user_key].status = STATUS.ORDER_MAIN_MENU;
+      // 핫도그들과 브리또들중 골라주세여
+      user[user_key].lastMenu = {
+        main: '',
+        detail: '',
+        topping: []
+      };
+      selectMainMenu(res);
+    } else if (content == "2. 사이드 주문하기") {
+      user[user_key].status = STATUS.ORDER_SIDE_MENU;
+    } else if (content == "3. 메뉴선택완료") {
+      user[user_key].status = STATUS.ORDER_DONE;
+    }
+  } else if(user[user_key].status == STATUS.ORDER_MAIN_MENU) {
+    if (content == "핫도그 (Hotdog)") {
+      user[user_key].status = STATUS.ORDER_HOTDOG;
+      user[user_key].lastMenu.main = '핫도그 (Hotdog)';
+      // 디테일한 핫도그 설정.
+    } else {
+      user[user_key].status = STATUS.ORDER_BURRITO;
+      user[user_key].lastMenu.main = '브리또(Burrrito)';
+      // 디테일한 브리또 설정.
+    }
+  } else if(user[user_key].status == STATUS.ORDER_SIDE_MENU) {
+
+  } else if(user[user_key].status == STATUS.ORDER_DONE) {
+
+  } else if(user[user_key].status == STATUS.ORDER_HOTDOG) {
+    // 디테일한 맛 설정.
+    user[user_key].lastMenu.detail = '디테일한 핫도그 명';
+    user[user_key].status = STATUS.SELECT_HOTDOG_SPICY;
+  } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
+    // 디테일한 맛 설정.
+    user[user_key].lastMenu.detail = '디테일한 브리또 명칭';
+    user[user_key].status = STATUS.SELECT_BURRITO_SPICY;
+  } else if(user[user_key].status == STATUS.SELECT_HOTDOG_SPICY) {
+    // 메뉴 추가.
+    user[user_key].lastMenu.spicy = "매운정도";
+    user[user_key].menus.push(user[user_key].lastMenu);
+    user[user_key].status = STATUS.MAIN_MENU;
+    // 선택이 완료되었습니다~
+  } else if(user[user_key].status == STATUS.SELECT_BURRITO_SPICY) {
+    user[user_key].lastMenu.spicy = "매운정도";
+    user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
+    // 선택이 완료되었습니다~
+  } else if(user[user_key].status == STATUS.ADD_BURRITO_TOPPING) {
+    // 의도분석.
+    if (false) {
+      // 선택이 완료되었습니다.
+      user[user_key].menus.push(user[user_key].lastMenu);
+      user[user_key].status = STATUS.MAIN_MENU;
+    } else if (false) {
+      // 토핑을 찾는다.
+      // 토핑제거
+      user[user_key].topping.push();
+      // 토핑 추가가 되었습니다. 더 추가를 원하시면 추가, 싫으면 꺼라.
+      user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
+    } else {
+      // 토핑을 찾는다.
+      // 토핑추가.
+      user[user_key].topping.push();
+      // 토핑 추가가 되었습니다. 더 추가를 원하시면 추가, 싫으면 꺼라.
+      user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
+    }
   }
-  connection.query(`UPDATE count SET question = ${count+1}`);
+
 
   var answer = {
     "message" : {
-      "text": sentence.toString(),
+      "text": "default",
       "keyboard": {
         "type": "text"
       }
@@ -51,11 +161,84 @@ app.post('/message', function(req, res) {
   res.send(answer);
 });
 
-var MEAN = {
-  ORDER: 1,
-  DONE: 2,
-  DONT_UNDERSTAND: 3
-};
+function selectMainMenu(res) {
+  var answer = {
+    "message" : {
+      "text": "메뉴를 선택해 주세요.",
+      "keyboard": {
+        "type": "buttons",
+        "buttons": [
+          "핫도그 (Hotdog)",
+          "브리또 (Burrito)",
+        ]
+      }
+    }
+  };
+
+  res.send(answer);
+}
+
+function agree(user_key, res) {
+    initUser(user_key);
+    user[user_key].status = STATUS.PRIVATE_INFO_AGREE_FLOW;
+
+    var concept = "이름 : \n전화번호 : ";
+    var answer = {
+      "message" : {
+        "text": "정보 제공에 동의하셨습니다.\n다음 양식에 맞추어 내용을 입력해 주세요.\n\n" + concept,
+        "keyboard": {
+          "type": "text"
+        }
+      }
+    };
+
+    res.send(answer);
+}
+
+function mainMenu(res) {
+  var answer = {
+    "message" : {
+      "text": "메뉴를 선택해 주세요.",
+      "keyboard": {
+        "type": "buttons",
+        "buttons": [
+          "1. 메뉴 주문하기",
+          "2. 사이드 주문하기",
+          "3. 메뉴선택완료"
+        ]
+      }
+    }
+  };
+
+  res.send(answer);
+}
+
+function agreePrivateInfoUse(res) {
+  var answer = {
+    "message" : {
+      "text": "사용을 위한 개인정보 동의가 필요합니다.",
+      "keyboard": {
+        "type": "buttons",
+        "buttons": [
+          "개인정보 이용 동의",
+          "취소",
+        ]
+      }
+    }
+  };
+
+  res.send(answer);
+}
+
+function initUser(user_key) {
+  if (!user[user_key]) {
+    user[user_key] = {
+      status: STATUS.MAIN_MENU,
+      menus: [
+      ]
+    }
+  }
+}
 
 function orderflow(text) {
   var sentence = textToSentence(text);
