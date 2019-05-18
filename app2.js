@@ -48,19 +48,13 @@ app.listen(8080, function(){ // node app.js 8080포트(임시)를 통해 서버 
 });
 
 app.get('/keyboard', function(req, res) { //데이터를 받는 양식 http메소드
-  var answer = {
-    "message" : {
-      "text": "~!@$ 를 이용해 주셔서 감사합니다.",
-    },
-    "keyboard": {
-      "type": "buttons",
-      "buttons": [
-        "주문시작"
-      ]
-    }
-  };
-
-  res.send(answer);
+  res.send(
+  {
+    "type": "buttons",
+    "buttons": [
+      "주문시작"
+    ]
+  });
 });
 
 app.post('/message', function(req, res) {
