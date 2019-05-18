@@ -89,6 +89,7 @@ app.post('/message', function(req, res) {
       // 핫도그들과 브리또들중 골라주세여
       user[user_key].lastMenu = {
         main: '',
+        spicy: '',
         detail: '',
         topping: []
       };
@@ -102,41 +103,36 @@ app.post('/message', function(req, res) {
     }
   } else if(user[user_key].status == STATUS.ORDER_MAIN_MENU) {
     if (content == "핫도그 (Hotdog)") {
-      user[user_key].status = STATUS.ORDER_HOTDOG;
+      user[user_key].status = STATUS.SELECT_HOTDOG_SPICY;
       user[user_key].lastMenu.main = '핫도그 (Hotdog)';
-      // 디테일한 핫도그 설정.
-      testMessage(res, '디테일한 핫도그 설정.');
+      selectSpicy(res);
     } else {
-      user[user_key].status = STATUS.ORDER_BURRITO;
+      user[user_key].status = STATUS.SELECT_BURRITO_SPICY;
       user[user_key].lastMenu.main = '브리또(Burrrito)';
-      // 디테일한 브리또 설정.
-      testMessage(res, '디테일한 브리또 설정.');
+      selectSpicy(res);
     }
-  } else if(user[user_key].status == STATUS.ORDER_SIDE_MENU) {
-    testMessage(res, 'ORDER_SIDE_MENU');
-  } else if(user[user_key].status == STATUS.ORDER_DONE) {
-    testMessage(res, 'ORDER_DONE');
-  } else if(user[user_key].status == STATUS.ORDER_HOTDOG) {
-    // 디테일한 맛 설정.
-    user[user_key].lastMenu.detail = '디테일한 핫도그 명';
-    user[user_key].status = STATUS.SELECT_HOTDOG_SPICY;
-      testMessage(res, 'SELECT_HOTDOG_SPICY');
-  } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
-    // 디테일한 맛 설정.
-    user[user_key].lastMenu.detail = '디테일한 브리또 명칭';
-    user[user_key].status = STATUS.SELECT_BURRITO_SPICY;
-      testMessage(res, 'SELECT_BURRITO_SPICY');
   } else if(user[user_key].status == STATUS.SELECT_HOTDOG_SPICY) {
     // 메뉴 추가.
-    user[user_key].lastMenu.spicy = "매운정도";
-    user[user_key].menus.push(user[user_key].lastMenu);
-    user[user_key].status = STATUS.MAIN_MENU;
-      testMessage(res, 'MAIN_MENU');
+    user[user_key].lastMenu.spicy = content;
+    console.log(user[user_key].lastMenu);
+    testMessage(res, '디테일한 핫도그를 설정해 주세요.');
     // 선택이 완료되었습니다~
+  } else if(user[user_key].status == STATUS.ORDER_HOTDOG) {
+    var hotdogs = connection.query(`SELECT * FROM menus WHERE type='hotdog'`);
+    var menus = getMenus(hotdogs);
+    var selectedMenu = findSentence(sentence,menus);
+    var selectedHotdog = connection.query(`SELECT * FROM hotdog WHERE id=${selectedMenu.index}`);
+    selectedHotdog = selectedHotdog[0]?selectedHotdog[0]:{};
+
+    // 디테일한 맛 설정.
+    user[user_key].lastMenu.detail = selectedHotdog.name;
+    console.log(selectedHotdog);
+    user[user_key].status = STATUS.MAIN_MENU;
+    testMessage(res, selectedHotdog.name + '메뉴가 추가되었습니다.' + selectedHotdog.price + '원');
   } else if(user[user_key].status == STATUS.SELECT_BURRITO_SPICY) {
-    user[user_key].lastMenu.spicy = "매운정도";
-    user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
-      testMessage(res, 'ADD_BURRITO_TOPPING');
+    user[user_key].lastMenu.spicy = content;
+    user[user_key].status = STATUS.ORDER_BURRITO;
+    testMessage(res, '디테일한 브리또를 설정해 주세요.');
     // 선택이 완료되었습니다~
   } else if(user[user_key].status == STATUS.ADD_BURRITO_TOPPING) {
     // 의도분석.
@@ -144,22 +140,31 @@ app.post('/message', function(req, res) {
       // 선택이 완료되었습니다.
       user[user_key].menus.push(user[user_key].lastMenu);
       user[user_key].status = STATUS.MAIN_MENU;
-        testMessage(res, 'MAIN_MENU');
+        testMessage(res, '메뉴가 추가되었습니다.');
     } else if (false) {
       // 토핑을 찾는다.
       // 토핑제거
-      user[user_key].topping.push();
+      user[user_key].topping.push("topping");
       // 토핑 추가가 되었습니다. 더 추가를 원하시면 추가, 싫으면 꺼라.
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
-      testMessage(res, 'ADD_BURRITO_TOPPING');
+      testMessage(res, '토핑 제거');
     } else {
       // 토핑을 찾는다.
       // 토핑추가.
-      user[user_key].topping.push();
+      user[user_key].topping.push("topping");
       // 토핑 추가가 되었습니다. 더 추가를 원하시면 추가, 싫으면 꺼라.
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
-      testMessage(res, 'ADD_BURRITO_TOPPING');
+      testMessage(res, '토핑 추가');
     }
+  } else if(user[user_key].status == STATUS.ORDER_SIDE_MENU) {
+    testMessage(res, 'ORDER_SIDE_MENU');
+  } else if(user[user_key].status == STATUS.ORDER_DONE) {
+    testMessage(res, 'ORDER_DONE');
+  } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
+    // 디테일한 맛 설정.
+    user[user_key].lastMenu.detail = '디테일한 브리또 명칭';
+    user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
+      testMessage(res, 'SELECT_BURRITO_SPICY');
   }
 });
 
@@ -176,6 +181,23 @@ function testMessage(res, text) {
   res.send(answer);
 }
 
+getMenus(menus) {
+  var result = [];
+
+  for(var i=0;i<menues.length;i++) {
+    var menuRow = menus[i];
+    var sentence = [];
+
+    for(var j=0;j<menuRow.length;j++) {
+      sentence.push(menuRow.name);
+    }
+
+    result.push(sentence);
+  }
+
+  return result;
+}
+
 function privateInfo(content) {
   var result = content.split('\n');
 
@@ -183,6 +205,24 @@ function privateInfo(content) {
     name: result[0]?result[0]:'',
     phone: result[1]?result[1]:''
   };
+}
+
+function selectSpicy(res) {
+  var answer = {
+    "message" : {
+      "text": "소스를 선택해 주세요.",
+    },
+    "keyboard": {
+      "type": "buttons",
+      "buttons": [
+        "#안매운맛",
+        "#중간맛",
+        "#매운맛"
+      ]
+    }
+  };
+
+  res.send(answer);
 }
 
 function selectMainMenu(res) {
