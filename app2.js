@@ -242,12 +242,16 @@ app.post('/message', function(req, res) {
 
 function getStringLastMenu(menu) {
   var result = '';
-  result += `${menu.detail}(${menu.spicy})`;
+  result += `${menu.main}\n${menu.detail}-${menu.spicy}\n`;
 
   if(menu.topping.length>0) {
     result += '[ ';
-    menu.topping.forEach((topping) => {
-      result += topping + ' ';
+    menu.topping.forEach((topping, index) => {
+      if(index !== menu.topping.length-1) {
+        result += topping + ', ';
+      } else {
+        result += topping + ' ';
+      }
     });
     result += ']';
   }
@@ -263,7 +267,7 @@ function getStringMenu(user_key) {
       result += '-------------------------\n'
       result += '※ 주문목록\n'
       user[user_key].menus.forEach((menu) => {
-        result += `${menu.main}\n${menu.detail}(${menu.spicy})\n`;
+        result += `${menu.main}\n${menu.detail}-${menu.spicy}\n`;
 
         if(menu.topping.length>0) {
           result += '[ ';
