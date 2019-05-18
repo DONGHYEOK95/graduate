@@ -36,7 +36,7 @@ app.post('/message', function(req, res) {
 
   connection.connect();
   connection.query('SELECT * FROM count',function(err,query_res_1){
-    var count =  query_res[0].question;
+    var count =  query_res_1[0].question;
 
     for (var i=0;i<sentence.length; i++) {
       connection.query(`INSERT INTO question(qid, index, text) VALUES (${count}, ${i}, ${sentence[i]})`, function(err, query_res_2) {
