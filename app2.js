@@ -70,8 +70,8 @@ app.post('/message', function(req, res) {
   var isAgree = connection.query(`SELECT * FROM user WHERE userKey='${user_key}'`);
 
   if (user[user_key] && user[user_key].status == STATUS.PRIVATE_INFO_AGREE_FLOW) {
-    // name, 폰번호를 추출하는 함수를 만들어야 한다.
-    connection.query(`INSERT INTO user VALUES (${user_key}, ${name}, ${phone}, 'true')`);
+    var privateInfo = privateInfo(content);
+    connection.query(`INSERT INTO user VALUES (${user_key}, ${privateInfo.name}, ${privateInfo.phone}, 'true')`);
     initUser(user_key);
     mainMenu(res);
   } else if (!isAgree[0] || isAgree && isAgree[0] && isAgree[0].agree !== 'true') {
@@ -92,40 +92,48 @@ app.post('/message', function(req, res) {
       selectMainMenu(res);
     } else if (content == "2. 사이드 주문하기") {
       user[user_key].status = STATUS.ORDER_SIDE_MENU;
+      testMessage(res, '사이드 주문하기');
     } else if (content == "3. 메뉴선택완료") {
       user[user_key].status = STATUS.ORDER_DONE;
+      testMessage(res, '메뉴선택완료');
     }
   } else if(user[user_key].status == STATUS.ORDER_MAIN_MENU) {
     if (content == "핫도그 (Hotdog)") {
       user[user_key].status = STATUS.ORDER_HOTDOG;
       user[user_key].lastMenu.main = '핫도그 (Hotdog)';
       // 디테일한 핫도그 설정.
+      testMessage(res, '디테일한 핫도그 설정.');
     } else {
       user[user_key].status = STATUS.ORDER_BURRITO;
       user[user_key].lastMenu.main = '브리또(Burrrito)';
       // 디테일한 브리또 설정.
+      testMessage(res, '디테일한 브리또 설정.');
     }
   } else if(user[user_key].status == STATUS.ORDER_SIDE_MENU) {
-
+    testMessage(res, 'ORDER_SIDE_MENU');
   } else if(user[user_key].status == STATUS.ORDER_DONE) {
-
+    testMessage(res, 'ORDER_DONE');
   } else if(user[user_key].status == STATUS.ORDER_HOTDOG) {
     // 디테일한 맛 설정.
     user[user_key].lastMenu.detail = '디테일한 핫도그 명';
     user[user_key].status = STATUS.SELECT_HOTDOG_SPICY;
+      testMessage(res, 'SELECT_HOTDOG_SPICY');
   } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
     // 디테일한 맛 설정.
     user[user_key].lastMenu.detail = '디테일한 브리또 명칭';
     user[user_key].status = STATUS.SELECT_BURRITO_SPICY;
+      testMessage(res, 'SELECT_BURRITO_SPICY');
   } else if(user[user_key].status == STATUS.SELECT_HOTDOG_SPICY) {
     // 메뉴 추가.
     user[user_key].lastMenu.spicy = "매운정도";
     user[user_key].menus.push(user[user_key].lastMenu);
     user[user_key].status = STATUS.MAIN_MENU;
+      testMessage(res, 'MAIN_MENU');
     // 선택이 완료되었습니다~
   } else if(user[user_key].status == STATUS.SELECT_BURRITO_SPICY) {
     user[user_key].lastMenu.spicy = "매운정도";
     user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
+      testMessage(res, 'ADD_BURRITO_TOPPING');
     // 선택이 완료되었습니다~
   } else if(user[user_key].status == STATUS.ADD_BURRITO_TOPPING) {
     // 의도분석.
@@ -133,21 +141,46 @@ app.post('/message', function(req, res) {
       // 선택이 완료되었습니다.
       user[user_key].menus.push(user[user_key].lastMenu);
       user[user_key].status = STATUS.MAIN_MENU;
+        testMessage(res, 'MAIN_MENU');
     } else if (false) {
       // 토핑을 찾는다.
       // 토핑제거
       user[user_key].topping.push();
       // 토핑 추가가 되었습니다. 더 추가를 원하시면 추가, 싫으면 꺼라.
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
+      testMessage(res, 'ADD_BURRITO_TOPPING');
     } else {
       // 토핑을 찾는다.
       // 토핑추가.
       user[user_key].topping.push();
       // 토핑 추가가 되었습니다. 더 추가를 원하시면 추가, 싫으면 꺼라.
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
+      testMessage(res, 'ADD_BURRITO_TOPPING');
     }
   }
 });
+
+function testMessage(res, text) {
+  var answer = {
+    "message" : {
+      "text": text,
+    },
+    "keyboard": {
+      "type": "text"
+    }
+  };
+
+  res.send(answer);
+}
+
+function privateInfo(content) {
+  var result = content.split('\n');
+
+  return {
+    name: result[0]?result[0]:'',
+    phone: result[1]?result[1]:''
+  };
+}
 
 function selectMainMenu(res) {
   var answer = {
@@ -191,8 +224,9 @@ function mainMenu(res) {
     "keyboard": {
       "type": "buttons",
       "buttons": [
-        "개인정보 이용 동의",
-        "취소",
+        "1. 메뉴 주문하기",
+        "2. 사이드 주문하기",
+        "3. 메뉴선택완료"
       ]
     }
   };
