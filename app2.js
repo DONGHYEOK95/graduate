@@ -32,31 +32,22 @@ app.post('/message', function(req, res) {
   var content = decodeURIComponent(req.body.content);
 
   var sentence = textToSentence(content);
+  var count = connection.query('SELECT * FROM count').question;
 
-  var count = connection.query('SELECT * FROM count');
-  console.log(count);
-  //   console.log(query_res_1);
-  //   var count =  query_res_1[0].question;
-  //
-  //   for (var i=0;i<sentence.length; i++) {
-  //     connection.query(`INSERT INTO question(qid, index, text) VALUES (${count}, ${i}, ${sentence[i]})`, function(err, query_res_2) {
-  //       if (i == sentence.length-1) {
-  //         connection.query(`UPDATE count SET question = ${count+1}`, function(err, query_res_3) {
-  //           console.log('update is done');
-  //
-  //           var answer = {
-  //             "message" : {
-  //               "text": sentence.toString(),
-  //               "keyboard": {
-  //                 "type": "text"
-  //               }
-  //             }
-  //           };
-  //           res.send(answer);
-  //         });
-  //       }
-  //     });
-  //   }
+  for (var i=0;i<sentence.length; i++) {
+    connection.query(`INSERT INTO question(qid, index, text) VALUES (${count}, ${i}, ${sentence[i]})`);
+  }
+  connection.query(`UPDATE count SET question = ${count+1}`);
+
+  var answer = {
+    "message" : {
+      "text": sentence.toString(),
+      "keyboard": {
+        "type": "text"
+      }
+    }
+  };
+  res.send(answer);
 });
 
 var MEAN = {
