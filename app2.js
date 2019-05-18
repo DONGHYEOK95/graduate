@@ -89,7 +89,8 @@ app.post('/message', function(req, res) {
         main: '',
         spicy: '',
         detail: '',
-        topping: []
+        topping: [],
+        price: 0
       };
       selectMainMenu(res);
     } else if (content == "2. 사이드 주문하기") {
@@ -112,7 +113,6 @@ app.post('/message', function(req, res) {
   } else if(user[user_key].status == STATUS.SELECT_HOTDOG_SPICY) {
     // 메뉴 추가.
     user[user_key].lastMenu.spicy = content;
-    console.log(user[user_key].lastMenu);
     testMessage(res, '디테일한 핫도그를 설정해 주세요.');
     user[user_key].status = STATUS.ORDER_HOTDOG;
   } else if(user[user_key].status == STATUS.ORDER_HOTDOG) {
@@ -123,29 +123,32 @@ app.post('/message', function(req, res) {
     selectedHotdog = selectedHotdog[0]?selectedHotdog[0]:null;
 
     user[user_key].lastMenu.detail = selectedHotdog.name;
-    console.log(user[user_key].lastMenu);
+    user[user_key].lastMenu.price += selectedHotdog.price;
     testMessage(res, selectedHotdog.name + '메뉴가 추가되었습니다.' + selectedHotdog.price + '원');
     user[user_key].status = STATUS.MAIN_MENU;
   } else if(user[user_key].status == STATUS.SELECT_BURRITO_SPICY) {
     // 메뉴 추가.
     user[user_key].lastMenu.spicy = content;
-    console.log(user[user_key].lastMenu);
     testMessage(res, '디테일한 브리또를 설정해 주세요.');
     user[user_key].status = STATUS.ORDER_BURRITO;
   } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
     var burritos = connection.query(`SELECT * FROM menus WHERE type='burrito'`);
     var menus = getMenus(burritos);
-    console.log(menus);
     var selectedMenu = findSentence(sentence,menus);
-    console.log(selectedMenu);
     var selectedBurrito = connection.query(`SELECT * FROM burrito WHERE id=${selectedMenu.index}`);
     selectedBurrito = selectedBurrito[0]?selectedBurrito[0]:null;
 
     user[user_key].lastMenu.detail = selectedBurrito.name;
-    console.log(user[user_key].lastMenu);
+    user[user_key].lastMenu.price += selectedBurrito.price;
     testMessage(res, selectedBurrito.name + '메뉴가 추가되었습니다.' + selectedBurrito.price + '원');
     user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
   } else if(user[user_key].status == STATUS.ADD_BURRITO_TOPPING) {
+    var questions = connection.query(`SELECT * FROM question`);
+    var answers = connection.query(`SELECT * FROM answer`);
+    var menus = getQuestion(questions);
+    var selectedMenu = findSentence(sentence,menus);
+
+    console.log(answers[selectedMenu.index].type);
     // 의도분석.
     if (false) {
       // 선택이 완료되었습니다.
@@ -185,6 +188,26 @@ function testMessage(res, text) {
   };
 
   res.send(answer);
+}
+
+function getQuestion(menus) {
+  var result = [];
+  var lastIndex = 0;
+  var sentence = [];
+  for(var i=0;i<menus.length;i++) {
+    if (lastIndex !== menus[i].qid) {
+      lastIndex = menus[i].qid;
+      result.push(sentence);
+      sentence = [];
+    }
+    sentence.push(menus[i].name);
+  }
+
+  if (sentence.length>0) {
+    result.push(sentence);
+  }
+
+  return result;
 }
 
 function getMenus(menus) {
