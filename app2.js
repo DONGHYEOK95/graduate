@@ -20,34 +20,21 @@ app.get('/keyboard', function(req, res) { //데이터를 받는 양식 http메�
 });
 
 app.post('/message', function(req, res) {
-  var user_key = decodeURIComponent(req.body.user_key);
+  var userKey = decodeURIComponent(req.body.user_key);
   var type = decodeURIComponent(req.body.type);
-  var content = decodeURIComponent(req.body.content);
+  var text = decodeURIComponent(req.body.content);
 
-  answer = {
-    "message" : {
-      "text": "ㅎㅇㅎㅇ",
-      "keyboard": {
-        "type": "text"
+  mecab.pos(text, function(err,result) {
+    answer = {
+      "message" : {
+        "text": textToSentence(text).toString(),
+        "keyboard": {
+          "type": "text"
+        }
       }
-    }
-  };
-  console.log("------------------------------------------------------------------------");
-  console.log('USER_LOGIN : ', user_key);
-  res.send(answer);
-
-
-  // mecab.pos(content, function(err,result) {
-  //   answer = {
-  //     "message" : {
-  //       "text": "※ 형태소 분석 결과\n" + result.toString(),
-  //       "keyboard": {
-  //         "type": "text"
-  //       }
-  //     }
-  //   };
-  //   res.send(answer);
-  // });
+    };
+    res.send(answer);
+  });
 });
 
 var MEAN = {
