@@ -57,7 +57,7 @@ app.post('/message', function(req, res) {
   //       }
   //     });
   //   }
-  // });
+});
 
 var MEAN = {
   ORDER: 1,
