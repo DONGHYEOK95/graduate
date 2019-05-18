@@ -11,6 +11,7 @@ var connection = mysql.createConnection({
   port     : 3306,
   database : 'graduate'
 });
+connection.connect();
 
 app.use('/images', express.static('images'));
 app.use(bodyparser.json()); // 바디파서로 파싱해서 쓰겟다, 스트링데이터를 쓰겟다
@@ -34,7 +35,6 @@ app.post('/message', function(req, res) {
 
   var sentence = textToSentence(content);
 
-  connection.connect();
   connection.query('SELECT * FROM count',function(err,query_res_1){
     console.log(query_res_1);
     var count =  query_res_1[0].question;
@@ -54,12 +54,12 @@ app.post('/message', function(req, res) {
               }
             };
             res.send(answer);
+            connection.end();
           });
         }
       });
     }
   });
-  connection.end();
 });
 
 var MEAN = {
@@ -111,10 +111,8 @@ function isDone(sentence) {
 
 function textToSentence(content) {
   var sentence = [];
-  console.log(content);
 
   mecab.parse(content, function(err,result) {
-    console.log(result);
     for (var i=0; i<result.length; i++) {
       sentence.push(result[i][0]);
     }
