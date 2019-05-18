@@ -153,13 +153,13 @@ function selectMainMenu(res) {
   var answer = {
     "message" : {
       "text": "메뉴를 선택해 주세요.",
-      "keyboard": {
-        "type": "buttons",
-        "buttons": [
-          "핫도그 (Hotdog)",
-          "브리또 (Burrito)",
-        ]
-      }
+    },
+    "keyboard": {
+      "type": "buttons",
+      "buttons": [
+        "핫도그 (Hotdog)",
+        "브리또 (Burrito)",
+      ]
     }
   };
 
@@ -174,9 +174,9 @@ function agree(user_key, res) {
     var answer = {
       "message" : {
         "text": "정보 제공에 동의하셨습니다.\n다음 양식에 맞추어 내용을 입력해 주세요.\n\n" + concept,
-        "keyboard": {
-          "type": "text"
-        }
+      },
+      "keyboard": {
+        "type": "text"
       }
     };
 
@@ -187,14 +187,13 @@ function mainMenu(res) {
   var answer = {
     "message" : {
       "text": "메뉴를 선택해 주세요.",
-      "keyboard": {
-        "type": "buttons",
-        "buttons": [
-          "1. 메뉴 주문하기",
-          "2. 사이드 주문하기",
-          "3. 메뉴선택완료"
-        ]
-      }
+    },
+    "keyboard": {
+      "type": "buttons",
+      "buttons": [
+        "개인정보 이용 동의",
+        "취소",
+      ]
     }
   };
 
@@ -204,14 +203,14 @@ function mainMenu(res) {
 function agreePrivateInfoUse(res) {
   var answer = {
     "message" : {
-      "text": "사용을 위한 개인정보 동의가 필요합니다.",
-      "keyboard": {
-        "type": "buttons",
-        "buttons": [
-          "개인정보 이용 동의",
-          "취소",
-        ]
-      }
+      "text": "사용을 위한 개인정보 동의가 필요합니다."
+    },
+    "keyboard": {
+      "type": "buttons",
+      "buttons": [
+        "개인정보 이용 동의",
+        "취소",
+      ]
     }
   };
 
