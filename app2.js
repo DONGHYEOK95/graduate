@@ -86,6 +86,7 @@ function textToSentence(text) {
   var sentence = [];
 
   mecab.pos(text, function(err,result) {
+    console.log(result);
     for (var i=0; i<result.length; i++) {
       sentence.push(result[i][0]);
     }
