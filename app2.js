@@ -41,7 +41,7 @@ app.post('/message', function(req, res) {
     for (var i=0;i<sentence.length; i++) {
       connection.query(`INSERT INTO question(qid, index, text) VALUES (${count}, ${i}, ${sentence[i]})`, function(err, query_res_2) {
         if (i == sentence.length-1) {
-          connection.query(`UPDATE count SET question = ${count+1}`), function(err, query_res_3) {
+          connection.query(`UPDATE count SET question = ${count+1}`, function(err, query_res_3) {
             console.log('update is done');
 
             var answer = {
