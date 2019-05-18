@@ -83,11 +83,11 @@ function isDone(sentence) {
   }
 }
 
-function textToSentence(text) {
+function textToSentence(content) {
   var sentence = [];
-  console.log(text);
+  console.log(content);
 
-  mecab.pos(text, function(err,result) {
+  mecab.pos(content, function(err,result) {
     console.log(result);
     for (var i=0; i<result.length; i++) {
       sentence.push(result[i][0]);
