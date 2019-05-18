@@ -263,12 +263,16 @@ function getStringMenu(user_key) {
       result += '-------------------------\n'
       result += '※ 주문목록\n'
       user[user_key].menus.forEach((menu) => {
-        result += `${menu.detail}(${menu.spicy})`;
+        result += `${menu.main}\n${menu.detail}(${menu.spicy})\n`;
 
         if(menu.topping.length>0) {
           result += '[ ';
-          menu.topping.forEach((topping) => {
-            result += topping + ' ';
+          menu.topping.forEach((topping, index) => {
+            if(index !== menu.topping.length-1) {
+              result += topping + ', ';
+            } else {
+              result += topping + ' ';
+            }
           });
           result += ']';
         }
@@ -277,18 +281,13 @@ function getStringMenu(user_key) {
     }
 
     if (user[user_key].side.length > 0) {
-      result += '※ 사이드메뉴\n'
-      user[user_key].menus.forEach((menu) => {
-        result += `${menu.detail}(${menu.spicy})`;
-
-        if(menu.topping.length>0) {
-          result += '[ ';
-          menu.topping.forEach((topping) => {
-            result += topping + ' ';
-          });
-          result += ']';
+      result += '\n※ 사이드메뉴\n'
+      user[user_key].side.forEach((sideName, index) => {
+          if(index !== user[user_key].side.length-1) {
+        result += sideName + ', ';
+        } else {
+          result += sideName + ' ';
         }
-        result += '\n';
       });
     }
 
