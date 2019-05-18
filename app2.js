@@ -67,7 +67,7 @@ app.post('/message', function(req, res) {
   var sentence = textToSentence(content);
   var count = connection.query(`SELECT * FROM count`)[0].question;
 
-  var isAgree = connection.query(`SELECT * FROM user WHERE userKey=${user_key}`);
+  var isAgree = connection.query(`SELECT * FROM user WHERE userKey='${user_key}'`);
 
   if (user[user_key] && user[user_key].status == STATUS.PRIVATE_INFO_AGREE_FLOW) {
     // name, 폰번호를 추출하는 함수를 만들어야 한다.
