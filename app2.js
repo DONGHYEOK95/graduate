@@ -182,7 +182,7 @@ function testMessage(res, text) {
 function getMenus(menus) {
   var result = [];
 
-  for(var i=0;i<menues.length;i++) {
+  for(var i=0;i<menus.length;i++) {
     var menuRow = menus[i];
     var sentence = [];
 
