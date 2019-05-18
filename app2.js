@@ -69,12 +69,12 @@ app.post('/message', function(req, res) {
 
   if (isAgree[0] && !user[user_key]) {
     initUser(user_key);
-    mainMenu(res);
+    mainMenu(res,getStringMenu(user_key));
   } else if (!isAgree[0] && user[user_key] && user[user_key].status == STATUS.PRIVATE_INFO_AGREE_FLOW) {
     var info = privateInfo(content);
     connection.query(`INSERT INTO user VALUES ('${user_key}', '${info.name}', '${info.phone}', 'true')`);
     user[user_key].status == STATUS.MAIN_MENU;
-    mainMenu(res);
+    mainMenu(res,getStringMenu(user_key));
   } else if (!isAgree[0] || isAgree && isAgree[0] && isAgree[0].agree !== 'true') {
     if (content == '개인정보 이용 동의') {
       agree(user_key, res);
@@ -92,7 +92,7 @@ app.post('/message', function(req, res) {
         topping: [],
         price: 0
       };
-      selectMainMenu(res);
+      selectMainMenu(res,getStringMenu(user_key));
     } else if (content == "2. 사이드 주문하기") {
       user[user_key].status = STATUS.ORDER_SIDE_MENU;
       sideMessage(res, '사이드 주문하기');
@@ -113,7 +113,7 @@ app.post('/message', function(req, res) {
   } else if(user[user_key].status == STATUS.SELECT_HOTDOG_SPICY) {
     // 메뉴 추가.
     user[user_key].lastMenu.spicy = content;
-    hotdogDetailMessage(res, '디테일한 핫도그를 설정해 주세요.');
+    hotdogDetailMessage(res);
     user[user_key].status = STATUS.ORDER_HOTDOG;
   } else if(user[user_key].status == STATUS.ORDER_HOTDOG) {
     var hotdogs = connection.query(`SELECT * FROM menus WHERE type='hotdog'`);
@@ -127,15 +127,15 @@ app.post('/message', function(req, res) {
       user[user_key].lastMenu.price += selectedHotdog.price;
       user[user_key].price += user[user_key].lastMenu.price;
       user[user_key].menus.push(user[user_key].lastMenu);
-      mainMenu(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
+      mainMenu(res,getStringMenu(user_key));
       user[user_key].status = STATUS.MAIN_MENU;
     } else {
-      hotdogDetailMessage(res, '인식하지 못했습니다. 올바른 응답을 해주세요.');
+      hotdogDetailMessage(res, '※ 인식하지 못했습니다.');
     }
   } else if(user[user_key].status == STATUS.SELECT_BURRITO_SPICY) {
     // 메뉴 추가.
     user[user_key].lastMenu.spicy = content;
-    burritoDetailMessage(res, '디테일한 브리또를 설정해 주세요.');
+    burritoDetailMessage(res);
     user[user_key].status = STATUS.ORDER_BURRITO;
   } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
     var burritos = connection.query(`SELECT * FROM menus WHERE type='burrito'`);
@@ -148,10 +148,10 @@ app.post('/message', function(req, res) {
     if (selectedMenu.simillarity > 0.35) {
       user[user_key].lastMenu.detail = selectedBurrito.name;
       user[user_key].lastMenu.price += selectedBurrito.price;
-      toppingDetailMessage(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
+      toppingDetailMessage(res, getStringLastMenu(user[user_key].lastMenu));
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
     } else {
-      burritoDetailMessage(res, '인식하지 못했습니다. 올바른 응답을 해주세요.');
+      burritoDetailMessage(res, '※ 인식하지 못했습니다.');
     }
   } else if(user[user_key].status == STATUS.ADD_BURRITO_TOPPING) {
     var questions = connection.query(`SELECT * FROM question`);
@@ -162,13 +162,13 @@ app.post('/message', function(req, res) {
 
 
     if (selectedMenu.simillarity < 0.35) {
-      toppingDetailMessage(res, '인식하지 못했습니다. 올바른 응답을 해주세요.');
+      toppingDetailMessage(res, '※ 인식하지 못했습니다.');
     } else if (type == MEAN.DONE) {
       // 선택이 완료되었습니다.
       user[user_key].menus.push(user[user_key].lastMenu);
       user[user_key].price += user[user_key].lastMenu.price;
       user[user_key].status = STATUS.MAIN_MENU;
-      mainMenu(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
+      mainMenu(res,getStringMenu(user_key));
     } else if (type == MEAN.DELETE) {
       var toppings = connection.query(`SELECT * FROM menus WHERE type='topping'`);
       var sentences = getMenus(toppings);
@@ -181,7 +181,7 @@ app.post('/message', function(req, res) {
         user[user_key].lastMenu.price -= selectedTopping.price;
       }
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
-      toppingDetailMessage(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
+      toppingDetailMessage(res, getStringLastMenu(user[user_key].lastMenu));
       console.log(user[user_key].lastMenu);
     } else if(type == MEAN.ORDER) {
       var toppings = connection.query(`SELECT * FROM menus WHERE type='topping'`);
@@ -194,7 +194,7 @@ app.post('/message', function(req, res) {
       user[user_key].lastMenu.topping.push(selectedTopping.name);
       user[user_key].lastMenu.price += selectedTopping.price;
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
-      toppingDetailMessage(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
+      toppingDetailMessage(res, getStringLastMenu(user[user_key].lastMenu));
       console.log(user[user_key].lastMenu);
     }
   } else if(user[user_key].status == STATUS.ORDER_SIDE_MENU) {
@@ -205,11 +205,11 @@ app.post('/message', function(req, res) {
     var type = answers[selectedMenu.index].type;
 
     if (selectedMenu.simillarity < 0.35) {
-      sideMessage(res, '인식하지 못했습니다. 올바른 응답을 해주세요.');
+      sideMessage(res, '※ 인식하지 못했습니다.');
     } else if (type == MEAN.DONE) {
       // 선택이 완료되었습니다.
       user[user_key].status = STATUS.MAIN_MENU;
-      mainMenu(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
+      mainMenu(res,getStringMenu(user_key));
     } else if (type == MEAN.DELETE) {
       var sides = connection.query(`SELECT * FROM menus WHERE type='side'`);
       var sentences = getMenus(sides);
@@ -222,7 +222,7 @@ app.post('/message', function(req, res) {
         user[user_key].price -= selectedSide.price;
       }
       user[user_key].status = STATUS.ORDER_SIDE_MENU;
-      sideMessage(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
+      sideMessage(res, getStringMenu(user_key));
     } else if (type == MEAN.ORDER) {
       var sides = connection.query(`SELECT * FROM menus WHERE type='side'`);
       var sentences = getMenus(sides);
@@ -233,12 +233,70 @@ app.post('/message', function(req, res) {
       user[user_key].side.push(selectedSide.name);
       user[user_key].price += selectedSide.price;
       user[user_key].status = STATUS.ORDER_SIDE_MENU;
-      sideMessage(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
+      sideMessage(res, getStringMenu(user_key));
     }
   } else if(user[user_key].status == STATUS.ORDER_DONE) {
-    testMessage(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
+    mainMenu(res, getStringMenu(user_key));
   }
 });
+
+function getStringLastMenu(menu) {
+  result += `${menu.detail}(${menu.spicy})`;
+
+  if(menu.topping.length>0) {
+    result += '[ ';
+    menu.topping.forEach((topping) => {
+      result += topping + ' ';
+    });
+    result += ']';
+  }
+  result += '\n';
+
+  return result;
+}
+
+function getStringMenu(user_key) {
+  var result = '';
+  if(user[user_key]) {
+    if (user[user_key].menus.length > 0) {
+      result += '※ 메인메뉴\n'
+      user[user_key].menus.forEach((menu) => {
+        result += `${menu.detail}(${menu.spicy})`;
+
+        if(menu.topping.length>0) {
+          result += '[ ';
+          menu.topping.forEach((topping) => {
+            result += topping + ' ';
+          });
+          result += ']';
+        }
+        result += '\n';
+      });
+    }
+
+    if (user[user_key].side.length > 0) {
+      result += '※ 사이드메뉴\n'
+      user[user_key].menus.forEach((menu) => {
+        result += `${menu.detail}(${menu.spicy})`;
+
+        if(menu.topping.length>0) {
+          result += '[ ';
+          menu.topping.forEach((topping) => {
+            result += topping + ' ';
+          });
+          result += ']';
+        }
+        result += '\n';
+      });
+    }
+
+    if(result !== '') {
+      result += '\n' + user[user_key].price + '원';
+    }
+  }
+
+  return result;
+}
 
 function burritoDetailMessage(res, text) {
     var answer = {
@@ -248,7 +306,7 @@ function burritoDetailMessage(res, text) {
           "width": 357,
           "height": 353
         },
-        "text": "※ 브리또를 선택해 주세요",
+        "text": "※ 브리또를 선택해 주세요" + (text?'\n'+text:''),
       },
       "keyboard": {
         "type": "text"
@@ -266,7 +324,7 @@ function hotdogDetailMessage(res, text) {
           "width": 357,
           "height": 287
         },
-        "text": "※ 핫도그를 선택해 주세요",
+        "text": "※ 핫도그를 선택해 주세요" + (text?'\n'+text:''),
       },
       "keyboard": {
         "type": "text"
@@ -284,7 +342,7 @@ function toppingDetailMessage(res, text) {
           "width": 361,
           "height": 290
         },
-        "text": "※ 토핑을 선택해 주세요",
+        "text": "※ 토핑을 선택해 주세요" + (text?'\n'+text:''),
       },
       "keyboard": {
         "type": "text"
@@ -387,7 +445,7 @@ function sideMessage(res, text) {
         "width": 358,
         "height": 259
       },
-      "text": "※ 사이드메뉴를 선택해 주세요",
+      "text": "※ 사이드메뉴를 선택해 주세요" + (text?'\n'+text:''),
     },
     "keyboard": {
       "type": "text"
@@ -405,7 +463,7 @@ function selectMainMenu(res) {
         "width": 279,
         "height": 135
       },
-      "text": "※ 메인메뉴를 선택해 주세요",
+      "text": "※ 메인메뉴를 선택해 주세요" + (text?'\n'+text:''),
     },
     "keyboard": {
       "type": "buttons",
@@ -449,7 +507,7 @@ function mainMenu(res,text) {
         "width": 245,
         "height": 180
       },
-      "text": text?text:"※ 메뉴를 선택해 주세요.",
+      "text": "※ 메뉴를 선택해 주세요." + (text?'\n'+text:''),
     },
     "keyboard": {
       "type": "buttons",
