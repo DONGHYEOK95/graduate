@@ -36,8 +36,8 @@ app.post('/message', function(req, res) {
   console.log('count : ', count);
 
   for (var i=0;i<sentence.length; i++) {
-    console.log(`INSERT INTO question(qid, index, text) VALUES (${count}, ${i}, '${sentence[i]}')`);
-    var res = connection.query(`INSERT INTO question(qid, index, text) VALUES (${count}, ${i}, '${sentence[i]}')`);
+    console.log(`INSERT INTO question VALUES (${count}, ${i}, '${sentence[i]}')`);
+    var res = connection.query(`INSERT INTO question VALUES (${count}, ${i}, '${sentence[i]}')`);
     console.log('res : ', res);
   }
   connection.query(`UPDATE count SET question = ${count+1}`);
