@@ -90,6 +90,7 @@ app.post('/message', function(req, res) {
         spicy: '',
         detail: '',
         topping: [],
+        side: [],
         price: 0
       };
       selectMainMenu(res);
@@ -124,7 +125,7 @@ app.post('/message', function(req, res) {
 
     user[user_key].lastMenu.detail = selectedHotdog.name;
     user[user_key].lastMenu.price += selectedHotdog.price;
-    testMessage(res, selectedHotdog.name + '메뉴가 추가되었습니다.' + selectedHotdog.price + '원');
+    mainMenu(res, selectedHotdog.name + '메뉴가 추가되었습니다.' + selectedHotdog.price + '원');
     user[user_key].status = STATUS.MAIN_MENU;
   } else if(user[user_key].status == STATUS.SELECT_BURRITO_SPICY) {
     // 메뉴 추가.
@@ -151,9 +152,8 @@ app.post('/message', function(req, res) {
 
     if (type == MEAN.DONE) {
       // 선택이 완료되었습니다.
-      user[user_key].menus.push(user[user_key].lastMenu);
       user[user_key].status = STATUS.MAIN_MENU;
-        testMessage(res, '메뉴가 추가가 완료되었습니다.');
+      mainMenu(res, '메뉴가 추가가 완료되었습니다.');
     } else if (type == MEAN.DELETE) {
       var toppings = connection.query(`SELECT * FROM menus WHERE type='topping'`);
       var sentences = getMenus(toppings);
@@ -161,8 +161,10 @@ app.post('/message', function(req, res) {
       var selectedTopping = connection.query(`SELECT * FROM topping WHERE id=${toppingSentence.index}`);
       selectedTopping = selectedTopping[0]?selectedTopping[0]:null;
 
-      user[user_key].lastMenu.topping.splice(selectedTopping.name, 1);
-      user[user_key].lastMenu.price -= selectedTopping.price;
+      if (user[user_key].lastMenu.topping.indexOf(selectedTopping.name)>=0) {
+        user[user_key].lastMenu.topping.splice(user[user_key].lastMenu.topping.indexOf(selectedTopping.name), 1);
+        user[user_key].lastMenu.price -= selectedTopping.price;
+      }
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
       testMessage(res, '토핑 제거');
       console.log(user[user_key].lastMenu);
@@ -181,7 +183,43 @@ app.post('/message', function(req, res) {
       console.log(user[user_key].lastMenu);
     }
   } else if(user[user_key].status == STATUS.ORDER_SIDE_MENU) {
-    testMessage(res, 'ORDER_SIDE_MENU');
+    var questions = connection.query(`SELECT * FROM question`);
+    var answers = connection.query(`SELECT * FROM answer`);
+    var menus = getQuestion(questions);
+    var selectedMenu = findSentence(sentence,menus);
+    var type = answers[selectedMenu.index].type;
+
+    if (type == MEAN.DONE) {
+      // 선택이 완료되었습니다.
+      user[user_key].status = STATUS.MAIN_MENU;
+      mainMenu(res, '메뉴가 추가가 완료되었습니다.');
+    } else if (type == MEAN.DELETE) {
+      var sides = connection.query(`SELECT * FROM menus WHERE type='side'`);
+      var sentences = getMenus(sides);
+      var sideSentence = findSentence(sentence,sentences);
+      var selectedSide = connection.query(`SELECT * FROM side WHERE id=${sideSentence.index}`);
+      selectedSide = selectedSide[0]?selectedSide[0]:null;
+
+      if (user[user_key].lastMenu.side.indexOf(selectedSide.name)>=0) {
+        user[user_key].lastMenu.side.splice(user[user_key].lastMenu.side.indexOf(selectedSide.name), 1);
+        user[user_key].lastMenu.price -= selectedSide.price;
+      }
+      user[user_key].status = STATUS.ORDER_SIDE_MENU;
+      testMessage(res, '사이드 제거');
+      console.log(user[user_key].lastMenu);
+    } else if (type == MEAN.ORDER) {
+      var sides = connection.query(`SELECT * FROM menus WHERE type='side'`);
+      var sentences = getMenus(sides);
+      var sideSentence = findSentence(sentence,sentences);
+      var selectedSide = connection.query(`SELECT * FROM side WHERE id=${sideSentence.index}`);
+      selectedSide = selectedSide[0]?selectedSide[0]:null;
+
+      user[user_key].lastMenu.push(selectedSide.name);
+      user[user_key].lastMenu.price += selectedSide.price;
+      user[user_key].status = STATUS.ORDER_SIDE_MENU;
+      testMessage(res, '사이드 추가');
+      console.log(user[user_key].lastMenu);
+    }
   } else if(user[user_key].status == STATUS.ORDER_DONE) {
     testMessage(res, 'ORDER_DONE');
   }
@@ -301,10 +339,10 @@ function agree(user_key, res) {
     res.send(answer);
 }
 
-function mainMenu(res) {
+function mainMenu(res,text) {
   var answer = {
     "message" : {
-      "text": "메뉴를 선택해 주세요.",
+      "text": text?text:"메뉴를 선택해 주세요.",
     },
     "keyboard": {
       "type": "buttons",
