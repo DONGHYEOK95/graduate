@@ -241,6 +241,7 @@ app.post('/message', function(req, res) {
 });
 
 function getStringLastMenu(menu) {
+  var result = '';
   result += `${menu.detail}(${menu.spicy})`;
 
   if(menu.topping.length>0) {
