@@ -24,17 +24,15 @@ app.post('/message', function(req, res) {
   var type = decodeURIComponent(req.body.type);
   var text = decodeURIComponent(req.body.content);
 
-  mecab.pos(text, function(err,result) {
-    answer = {
-      "message" : {
-        "text": textToSentence(text).toString(),
-        "keyboard": {
-          "type": "text"
-        }
+  answer = {
+    "message" : {
+      "text": textToSentence(text).toString(),
+      "keyboard": {
+        "type": "text"
       }
-    };
-    res.send(answer);
-  });
+    }
+  };
+  res.send(answer);
 });
 
 var MEAN = {
@@ -84,10 +82,10 @@ function isDone(sentence) {
   }
 }
 
-function textToSentence() {
+function textToSentence(text) {
   var sentence = [];
 
-  mecab.pos(content, function(err,result) {
+  mecab.pos(text, function(err,result) {
     for (var i=0; i<result.length; i++) {
       sentence.push(result[i][0]);
     }
