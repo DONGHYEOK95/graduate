@@ -135,7 +135,7 @@ app.post('/message', function(req, res) {
   } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
     var burritos = connection.query(`SELECT * FROM menus WHERE type='burrito'`);
     var menus = getMenus(burritos);
-    console.log(burritos);
+    console.log(menus);
     var selectedMenu = findSentence(sentence,menus);
     console.log(selectedMenu);
     var selectedBurrito = connection.query(`SELECT * FROM burrito WHERE id=${selectedMenu.index}`);
@@ -189,15 +189,18 @@ function testMessage(res, text) {
 
 function getMenus(menus) {
   var result = [];
-
+  var lastIndex = 0;
+  var sentence = [];
   for(var i=0;i<menus.length;i++) {
-    var menuRow = menus[i];
-    var sentence = [];
-
-    for(var j=0;j<menuRow.length;j++) {
-      sentence.push(menuRow.name);
+    if (lastIndex !== menus[i].index) {
+      lastIndex = menus[i].index;
+      result.push(sentence);
+      sentence = [];
     }
+    sentence.push(menus[i].name);
+  }
 
+  if (sentence.length>0) {
     result.push(sentence);
   }
 
