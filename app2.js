@@ -92,7 +92,7 @@ app.post('/message', function(req, res) {
         topping: [],
         price: 0
       };
-      selectMainMenu(res,getStringMenu(user_key));
+      selectMainMenu(res);
     } else if (content == "2. 사이드 주문하기") {
       user[user_key].status = STATUS.ORDER_SIDE_MENU;
       sideMessage(res, '사이드 주문하기');
@@ -463,7 +463,7 @@ function selectMainMenu(res) {
         "width": 279,
         "height": 135
       },
-      "text": "※ 메인메뉴를 선택해 주세요" + (text?'\n'+text:''),
+      "text": "※ 메인메뉴를 선택해 주세요",
     },
     "keyboard": {
       "type": "buttons",
