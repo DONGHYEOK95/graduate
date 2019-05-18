@@ -135,7 +135,7 @@ app.post('/message', function(req, res) {
   } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
     var burritos = connection.query(`SELECT * FROM menus WHERE type='burrito'`);
     var menus = getMenus(burritos);
-    console.log(menus);
+    console.log(burritos);
     var selectedMenu = findSentence(sentence,menus);
     console.log(selectedMenu);
     var selectedBurrito = connection.query(`SELECT * FROM burrito WHERE id=${selectedMenu.index}`);
