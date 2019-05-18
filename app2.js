@@ -133,9 +133,11 @@ app.post('/message', function(req, res) {
     testMessage(res, '디테일한 브리또를 설정해 주세요.');
     user[user_key].status = STATUS.ORDER_BURRITO;
   } else if(user[user_key].status == STATUS.ORDER_BURRITO) {
-    var burritos = connection.query(`SELECT * FROM menus WHERE type='burrito'`);
+    var class = connection.query(`SELECT * FROM menus WHERE type='burrito'`);
     var menus = getMenus(burritos);
+    console.log(menus);
     var selectedMenu = findSentence(sentence,menus);
+    console.log(selectedMenu);
     var selectedBurrito = connection.query(`SELECT * FROM burrito WHERE id=${selectedMenu.index}`);
     selectedBurrito = selectedBurrito[0]?selectedBurrito[0]:null;
 
