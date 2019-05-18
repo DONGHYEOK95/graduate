@@ -33,12 +33,9 @@ app.post('/message', function(req, res) {
 
   var sentence = textToSentence(content);
   var count = connection.query(`SELECT * FROM count`)[0].question;
-  console.log('count : ', count);
 
   for (var i=0;i<sentence.length; i++) {
-    console.log(`INSERT INTO question VALUES (${count}, ${i}, '${sentence[i]}')`);
-    var res = connection.query(`INSERT INTO question VALUES (${count}, ${i}, '${sentence[i]}')`);
-    console.log('res : ', res);
+    connection.query(`INSERT INTO question VALUES (${count}, ${i}, '${sentence[i]}')`);
   }
   connection.query(`UPDATE count SET question = ${count+1}`);
 
@@ -50,6 +47,7 @@ app.post('/message', function(req, res) {
       }
     }
   };
+
   res.send(answer);
 });
 
