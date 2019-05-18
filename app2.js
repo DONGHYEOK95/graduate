@@ -122,7 +122,7 @@ app.post('/message', function(req, res) {
     var menus = getMenus(hotdogs);
     var selectedMenu = findSentence(sentence,menus);
     var selectedHotdog = connection.query(`SELECT * FROM hotdog WHERE id=${selectedMenu.index}`);
-    selectedHotdog = selectedHotdog[0]?selectedHotdog[0]:{};
+    selectedHotdog = selectedHotdog[0]?selectedHotdog[0]:null;
 
     // 디테일한 맛 설정.
     user[user_key].lastMenu.detail = selectedHotdog.name;
@@ -181,7 +181,7 @@ function testMessage(res, text) {
   res.send(answer);
 }
 
-getMenus(menus) {
+function getMenus(menus) {
   var result = [];
 
   for(var i=0;i<menues.length;i++) {
