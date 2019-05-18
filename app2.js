@@ -126,7 +126,7 @@ app.post('/message', function(req, res) {
       user[user_key].menus.push(user[user_key].lastMenu);
       user[user_key].lastMenu.detail = selectedHotdog.name;
       user[user_key].lastMenu.price += selectedHotdog.price;
-      testMessage(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
+      mainMenu(res, beautyJSON(user[user_key].menus) + '\n' + beautyJSON(user[user_key].side) + '\n\nprice : ' + user[user_key].price);
       user[user_key].status = STATUS.MAIN_MENU;
     } else {
       testMessage(res, '인식하지 못했습니다. 올바른 응답을 해주세요.');
