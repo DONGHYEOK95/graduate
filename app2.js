@@ -149,6 +149,7 @@ app.post('/message', function(req, res) {
     var selectedMenu = findSentence(sentence,menus);
 
     console.log(answers[selectedMenu.index].type);
+    testMessage(res, 'ORDER_SIDE_MENU');
     // 의도분석.
     // if (false) {
     //   // 선택이 완료되었습니다.
