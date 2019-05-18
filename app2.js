@@ -150,26 +150,26 @@ app.post('/message', function(req, res) {
 
     console.log(answers[selectedMenu.index].type);
     // 의도분석.
-    if (false) {
-      // 선택이 완료되었습니다.
-      user[user_key].menus.push(user[user_key].lastMenu);
-      user[user_key].status = STATUS.MAIN_MENU;
-        testMessage(res, '메뉴가 추가되었습니다.');
-    } else if (false) {
-      // 토핑을 찾는다.
-      // 토핑제거
-      user[user_key].topping.push("topping");
-      // 토핑 추가가 되었습니다. 더 추가를 원하시면 추가, 싫으면 꺼라.
-      user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
-      testMessage(res, '토핑 제거');
-    } else {
-      // 토핑을 찾는다.
-      // 토핑추가.
-      user[user_key].topping.push("topping");
-      // 토핑 추가가 되었습니다. 더 추가를 원하시면 추가, 싫으면 꺼라.
-      user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
-      testMessage(res, '토핑 추가');
-    }
+    // if (false) {
+    //   // 선택이 완료되었습니다.
+    //   user[user_key].menus.push(user[user_key].lastMenu);
+    //   user[user_key].status = STATUS.MAIN_MENU;
+    //     testMessage(res, '메뉴가 추가되었습니다.');
+    // } else if (false) {
+    //   // 토핑을 찾는다.
+    //   // 토핑제거
+    //   user[user_key].topping.push("topping");
+    //   // 토핑 추가가 되었습니다. 더 추가를 원하시면 추가, 싫으면 꺼라.
+    //   user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
+    //   testMessage(res, '토핑 제거');
+    // } else {
+    //   // 토핑을 찾는다.
+    //   // 토핑추가.
+    //   user[user_key].topping.push("topping");
+    //   // 토핑 추가가 되었습니다. 더 추가를 원하시면 추가, 싫으면 꺼라.
+    //   user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
+    //   testMessage(res, '토핑 추가');
+    // }
   } else if(user[user_key].status == STATUS.ORDER_SIDE_MENU) {
     testMessage(res, 'ORDER_SIDE_MENU');
   } else if(user[user_key].status == STATUS.ORDER_DONE) {
