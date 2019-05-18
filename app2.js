@@ -2,7 +2,7 @@ var express=require('express'); //express=nodejs서버를 구동시키기위한 
 var app=express(); //app을 통해 express서버를 구동 app=서버
 var fs = require('fs');
 var bodyparser=require('body-parser'); //스트링을 데이터로 파싱
-var mecab = require('mecab-ya'); //형태소 분석기 라이브러리.
+var mecab = require('mecab-ffi'); //형태소 분석기 라이브러리.
 
 app.use('/images', express.static('images'));
 app.use(bodyparser.json()); // 바디파서로 파싱해서 쓰겟다, 스트링데이터를 쓰겟다
@@ -87,7 +87,7 @@ function textToSentence(content) {
   var sentence = [];
   console.log(content);
 
-  mecab.pos(content, function(err,result) {
+  mecab.parse(content, function(err,result) {
     console.log(result);
     for (var i=0; i<result.length; i++) {
       sentence.push(result[i][0]);
