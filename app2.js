@@ -32,10 +32,12 @@ app.post('/message', function(req, res) {
   var content = decodeURIComponent(req.body.content);
 
   var sentence = textToSentence(content);
-  var count = connection.query('SELECT * FROM count')[0].question;
+  var count = connection.query(`SELECT * FROM count`)[0].question;
+  console.log('count : ', count);
 
   for (var i=0;i<sentence.length; i++) {
-    connection.query(`INSERT INTO question(qid, index, text) VALUES (${count}, ${i}, ${sentence[i]})`);
+    var res = connection.query(`INSERT INTO question(qid, index, text) VALUES (${count}, ${i}, '${sentence[i]}')`);
+    console.log('res : ', res);
   }
   connection.query(`UPDATE count SET question = ${count+1}`);
 
