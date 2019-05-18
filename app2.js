@@ -71,7 +71,7 @@ app.post('/message', function(req, res) {
 
   if (user[user_key] && user[user_key].status == STATUS.PRIVATE_INFO_AGREE_FLOW) {
     var info = privateInfo(content);
-    connection.query(`INSERT INTO user VALUES (${user_key}, ${info.name}, ${info.phone}, 'true')`);
+    connection.query(`INSERT INTO user VALUES ('${user_key}', '${info.name}', '${info.phone}', 'true')`);
     initUser(user_key);
     mainMenu(res);
   } else if (!isAgree[0] || isAgree && isAgree[0] && isAgree[0].agree !== 'true') {
