@@ -5,7 +5,7 @@ var bodyparser=require('body-parser'); //스트링을 데이터로 파싱
 var mecab = require('mecab-ffi'); //형태소 분석기 라이브러리.
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-  host     : '0.0.0.0',
+  host     : 'ec2-54-180-82-68.ap-northeast-2.compute.amazonaws.com',
   user     : 'root',
   password : '1234',
   port     : 3306,
@@ -17,6 +17,11 @@ app.use(bodyparser.json()); // 바디파서로 파싱해서 쓰겟다, 스트링
 
 app.listen(8080, function(){ // node app.js 8080포트(임시)를 통해 서버 통신하겠다.
   console.log('server is running');
+  connection.connect();
+    connection.query('SELECT * FROM count',function(err,query_res_1){
+      console.log(query_res_1);
+    });
+  connection.end();
 });
 
 app.get('/keyboard', function(req, res) { //데이터를 받는 양식 http메소드
@@ -34,7 +39,6 @@ app.post('/message', function(req, res) {
 
   var sentence = textToSentence(content);
 
-  connection.connect();
   connection.query('SELECT * FROM count',function(err,query_res_1){
     console.log(query_res_1);
     var count =  query_res_1[0].question;
