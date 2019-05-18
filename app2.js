@@ -158,10 +158,10 @@ app.post('/message', function(req, res) {
       var toppings = connection.query(`SELECT * FROM menus WHERE type='topping'`);
       var sentences = getMenus(toppings);
       var toppingSentence = findSentence(sentence,sentences);
-      var selectedTopping = connection.query(`SELECT * FROM burrito WHERE id=${toppingSentence.index}`);
+      var selectedTopping = connection.query(`SELECT * FROM topping WHERE id=${toppingSentence.index}`);
       selectedTopping = selectedTopping[0]?selectedTopping[0]:null;
 
-      user[user_key].lastMenu.topping.splice(selectedTopping.name);
+      user[user_key].lastMenu.topping.splice(selectedTopping.name, 1);
       user[user_key].lastMenu.price -= selectedTopping.price;
       user[user_key].status = STATUS.ADD_BURRITO_TOPPING;
       testMessage(res, '토핑 제거');
@@ -170,7 +170,7 @@ app.post('/message', function(req, res) {
       var toppings = connection.query(`SELECT * FROM menus WHERE type='topping'`);
       var sentences = getMenus(toppings);
       var toppingSentence = findSentence(sentence,sentences);
-      var selectedTopping = connection.query(`SELECT * FROM burrito WHERE id=${toppingSentence.index}`);
+      var selectedTopping = connection.query(`SELECT * FROM topping WHERE id=${toppingSentence.index}`);
       selectedTopping = selectedTopping[0]?selectedTopping[0]:null;
 
       user[user_key].lastMenu.topping.push(selectedTopping.name);
