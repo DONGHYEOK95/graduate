@@ -149,7 +149,6 @@ app.post('/message', function(req, res) {
     var selectedMenu = findSentence(sentence,menus);
     var type = answers[selectedMenu.index].type;
 
-    의도분석.
     if (type == MEAN.DONE) {
       // 선택이 완료되었습니다.
       user[user_key].menus.push(user[user_key].lastMenu);
