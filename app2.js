@@ -116,7 +116,7 @@ app.post('/message', function(req, res) {
     user[user_key].lastMenu.spicy = content;
     console.log(user[user_key].lastMenu);
     testMessage(res, '디테일한 핫도그를 설정해 주세요.');
-    // 선택이 완료되었습니다~
+    user[user_key].status = STATUS.ORDER_HOTDOG;
   } else if(user[user_key].status == STATUS.ORDER_HOTDOG) {
     var hotdogs = connection.query(`SELECT * FROM menus WHERE type='hotdog'`);
     var menus = getMenus(hotdogs);
@@ -131,9 +131,8 @@ app.post('/message', function(req, res) {
     testMessage(res, selectedHotdog.name + '메뉴가 추가되었습니다.' + selectedHotdog.price + '원');
   } else if(user[user_key].status == STATUS.SELECT_BURRITO_SPICY) {
     user[user_key].lastMenu.spicy = content;
-    user[user_key].status = STATUS.ORDER_BURRITO;
     testMessage(res, '디테일한 브리또를 설정해 주세요.');
-    // 선택이 완료되었습니다~
+    user[user_key].status = STATUS.ORDER_BURRITO;~
   } else if(user[user_key].status == STATUS.ADD_BURRITO_TOPPING) {
     // 의도분석.
     if (false) {
