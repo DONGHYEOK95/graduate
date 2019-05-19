@@ -110,7 +110,7 @@ app.post('/message', function(req, res) {
       } else {
         currentOrder = ''
       }
-      viewOrderMessage(res, currentOrder + '주문상태 : ' + status);
+      viewOrderMessage(res, currentOrder + '\n주문상태 : ' + status);
     }
   } else if(user[user_key].status == STATUS.VIEW_ORDER) {
     delete user[user_key];
