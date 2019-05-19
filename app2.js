@@ -99,7 +99,7 @@ app.post('/message', function(req, res) {
       sideMessage(res, '사이드 주문하기');
     } else if (content == "3. 메뉴선택완료") {
       user[user_key].status = STATUS.ORDER_DONE;
-      testMessage(res, '메뉴선택완료');
+      testMessage(res, '※ 주소와 결제방법을 입력해 주세요.\nex) 주소 : 멀티 M515\n결제방법 : 카드');
     }
   } else if(user[user_key].status == STATUS.ORDER_MAIN_MENU) {
     if (content == "핫도그 (Hotdog)") {
@@ -237,7 +237,13 @@ app.post('/message', function(req, res) {
       sideMessage(res, getStringMenu(user_key));
     }
   } else if(user[user_key].status == STATUS.ORDER_DONE) {
-    mainMenu(res, getStringMenu(user_key));
+    if (user[user_key].menus.length > 0 || user[user_key].side.length > 0) {
+      user[user_key].status = STATUS.MAIN_MENU;
+      orderDone(res, getStringMenu(user_key));
+    } else {
+      user[user_key].status = STATUS.MAIN_MENU;
+      orderFail(res);
+    }
   }
 });
 
@@ -362,6 +368,11 @@ function toppingDetailMessage(res, text) {
 function testMessage(res, text) {
   var answer = {
     "message" : {
+      "photo": {
+        "url": "http://54.180.82.68:8080/images/MainLogo.jpg",
+        "width": 245,
+        "height": 180
+      },
       "text": text,
     },
     "keyboard": {
@@ -504,6 +515,52 @@ function agree(user_key, res) {
     };
 
     res.send(answer);
+}
+
+function orderFail(res,text) {
+  var answer = {
+    "message" : {
+      "photo": {
+        "url": "http://54.180.82.68:8080/images/MainLogo.jpg",
+        "width": 245,
+        "height": 180
+      },
+      "text": "※ 주문 목록이 없습니다." + (text?'\n'+text:''),
+    },
+    "keyboard": {
+      "type": "buttons",
+      "buttons": [
+        "1. 메뉴 주문하기",
+        "2. 사이드 주문하기",
+        "3. 메뉴선택완료"
+      ]
+    }
+  };
+
+  res.send(answer);
+}
+
+function orderDone(res,text) {
+  var answer = {
+    "message" : {
+      "photo": {
+        "url": "http://54.180.82.68:8080/images/MainLogo.jpg",
+        "width": 245,
+        "height": 180
+      },
+      "text": "※ 주문이 완료되었습니다." + (text?'\n'+text:''),
+    },
+    "keyboard": {
+      "type": "buttons",
+      "buttons": [
+        "1. 메뉴 주문하기",
+        "2. 사이드 주문하기",
+        "3. 메뉴선택완료"
+      ]
+    }
+  };
+
+  res.send(answer);
 }
 
 function mainMenu(res,text) {
