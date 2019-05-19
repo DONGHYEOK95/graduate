@@ -112,7 +112,8 @@ app.post('/message', function(req, res) {
       viewOrderMessage(res, currentOrder);
     }
   } else if(user[user_key].status == STATUS.VIEW_ORDER) {
-    user[user_key].status == STATUS.MAIN_MENU;
+    delete user[user_key];
+    initUser(user_key);
     mainMenu(res);
   } else if(user[user_key].status == STATUS.ORDER_MAIN_MENU) {
     if (content == "핫도그 (Hotdog)") {
