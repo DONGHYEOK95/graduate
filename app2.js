@@ -722,8 +722,14 @@ function initUser(user_key) {
       menus: [
       ],
       side: [
-
       ],
+      lastMenu = {
+        main: '',
+        spicy: '',
+        detail: '',
+        topping: [],
+        price: 0
+      },
       price: 0,
       pay: '',
       address: ''
