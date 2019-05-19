@@ -81,6 +81,7 @@ app.post('/message', function(req, res) {
 
   var sentence = textToSentence(content);
   var count = connection.query(`SELECT * FROM count`)[0].question;
+  var orderCount = connection.query(`SELECT * FROM orderCount`)[0].count;
 
   var isAgree = connection.query(`SELECT * FROM user WHERE userKey='${user_key}'`);
 
@@ -275,8 +276,8 @@ app.post('/message', function(req, res) {
       user[user_key].pay = resultContent[1]?resultContent[1]:'카드';
       // 디비에 저장한다.
       var orderMenu = getStringMenuNoEnter(user_key);
-      var count = connection.query('SELECT * FROM orders').length + 1;
-      connection.query(`INSERT INTO orders VALUES ('${count}', '${user_key}', '${orderMenu}', 'ready')`);
+      connection.query(`INSERT INTO orders VALUES ('${orderCount}', '${user_key}', '${orderMenu}', 'ready')`);
+      connection.query(`UPDATE orderCount SET count = ${orderCount+1}`);
 
       delete user[user_key];
       initUser(user_key);
