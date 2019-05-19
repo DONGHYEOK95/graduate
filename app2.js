@@ -112,10 +112,8 @@ app.post('/message', function(req, res) {
       viewOrderMessage(res, currentOrder);
     }
   } else if(user[user_key].status == STATUS.VIEW_ORDER) {
-    if (content == "확인") {
-      user[user_key].status == STATUS.MAIN_MENU;
-      mainMenu(res);
-    }
+    user[user_key].status == STATUS.MAIN_MENU;
+    mainMenu(res);
   } else if(user[user_key].status == STATUS.ORDER_MAIN_MENU) {
     if (content == "핫도그 (Hotdog)") {
       user[user_key].status = STATUS.SELECT_HOTDOG_SPICY;
