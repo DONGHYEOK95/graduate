@@ -105,7 +105,7 @@ app.post('/message', function(req, res) {
       user[user_key].status = STATUS.VIEW_ORDER;
       var currentOrder = connection.query(`SELECT * FROM order WHERE user_key=${user_key}`);
       if (currentOrder.length > 0) {
-        currentOrder = currentOrder[currentOrder.length-1].order.replaceAll("<br>", "\r\n");
+        currentOrder = currentOrder[currentOrder.length-1].order.replace(/(")/g, '\'');
       } else {
         currentOrder = ''
       }
@@ -258,7 +258,7 @@ app.post('/message', function(req, res) {
       user[user_key].pay = resultContent[0]?resultContent:'카드';
       user[user_key].address = resultContent[1]?resultContent[1]:'전화 바랍니다';
       // 디비에 저장한다.
-      var orderMenu = getStringMenu(user_key).replace(/(')/g, '\'\'\'');
+      var orderMenu = getStringMenu(user_key).replace(/(')/g, '\"');
       connection.query('INSERT INTO order(`user_key`, `order`) VALUES (\''+user_key+'\', \''+orderMenu + '\')');
 
       delete user[user_key];
