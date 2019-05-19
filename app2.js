@@ -56,6 +56,16 @@ app.get('/order', function(req, res) { //데이터를 받는 양식 http메소�
   });
 });
 
+app.post('/user', function(req, res) { //데이터를 받는 양식 http메소드
+  var user_key = decodeURIComponent(req.body.user_key);
+  var user = connection.query(`SELECT * FROM user WHERE userKey='${user_key}'`);
+  var currentOrder = connection.query(`SELECT * FROM orders WHERE user_key='${user_key}'`);
+  res.send(
+  {
+    "user": user
+  });
+});
+
 app.get('/keyboard', function(req, res) { //데이터를 받는 양식 http메소드
   res.send(
   {
