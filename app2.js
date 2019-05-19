@@ -104,12 +104,13 @@ app.post('/message', function(req, res) {
     } else if (content == "4. 주문 현황 확인") {
       user[user_key].status = STATUS.VIEW_ORDER;
       var currentOrder = connection.query(`SELECT * FROM orders WHERE user_key='${user_key}'`);
+      var status = currentOrder[currentOrder.length-1].status;
       if (currentOrder.length > 0) {
         currentOrder = currentOrder[currentOrder.length-1].order.replace(/(enter)/g, '\n');
       } else {
         currentOrder = ''
       }
-      viewOrderMessage(res, currentOrder);
+      viewOrderMessage(res, currentOrder + '주문상태 : ' + status);
     }
   } else if(user[user_key].status == STATUS.VIEW_ORDER) {
     delete user[user_key];
@@ -254,8 +255,8 @@ app.post('/message', function(req, res) {
     if (user[user_key].menus.length > 0 || user[user_key].side.length > 0) {
       var resultContent = content.split('\n');
       user[user_key].status = STATUS.MAIN_MENU;
-      user[user_key].pay = resultContent[0]?resultContent[0]:'카드';
-      user[user_key].address = resultContent[1]?resultContent[1]:'전화 바랍니다';
+      user[user_key].address = resultContent[0]?resultContent[0]:'전화 바랍니다';
+      user[user_key].pay = resultContent[1]?resultContent[1]:'카드';
       // 디비에 저장한다.
       var orderMenu = getStringMenuNoEnter(user_key);
       var count = connection.query('SELECT * FROM orders').length + 1;
