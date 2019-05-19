@@ -57,7 +57,7 @@ app.get('/order', function(req, res) { //데이터를 받는 양식 http메소�
 });
 
 app.get('/user', function(req, res) { //데이터를 받는 양식 http메소드
-  var users = connection.query(`SELECT * FROM orders`);
+  var users = connection.query(`SELECT * FROM user`);
   res.send(
   {
     "user": users
