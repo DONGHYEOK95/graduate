@@ -48,6 +48,18 @@ app.listen(8080, function(){ // node app.js 8080포트(임시)를 통해 서버 
   console.log('server is running');
 });
 
+app.post('/changeOrder', function(req, res) { //데이터를 받는 양식 http메소드
+  var id = decodeURIComponent(req.body.id);
+  var status = decodeURIComponent(req.body.status);
+  connection.query(`UPDATE orders SET status = '${status}' WHERE id = ${id}`);
+  var currentOrder = connection.query(`SELECT * FROM orders`);
+
+  res.send(
+  {
+    "data": currentOrder
+  });
+});
+
 app.get('/order', function(req, res) { //데이터를 받는 양식 http메소드
   var currentOrder = connection.query(`SELECT * FROM orders`);
   res.send(
@@ -127,7 +139,16 @@ app.post('/message', function(req, res) {
       } else {
         currentOrder = ''
       }
-      viewOrderMessage(res, currentOrder + '\n주문상태 : ' + status);
+
+      var statusString = status;
+      if(status == 'ready') {
+        statusString = "대기중";
+      } else if(status == 'cancle') {
+        statusString = "거부됨 + \n\n※ 자세한 사항은 tel:010-3683-7555";
+      } else if(status == 'delivery') {
+        statusString = "배송중";
+      }
+      viewOrderMessage(res, currentOrder + '\n주문상태 : ' + statusString);
     }
   } else if(user[user_key].status == STATUS.VIEW_ORDER) {
     delete user[user_key];
