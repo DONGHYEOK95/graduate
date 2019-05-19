@@ -349,7 +349,7 @@ function toppingDetailMessage(res, text) {
           "width": 361,
           "height": 290
         },
-        "text": "※ 토핑을 선택해 주세요" + (text?'\n'+text:''),
+        "text": "※ 토핑을 선택해 주세요\n(완료 시 \"선택완료\" 입력)" + (text?'\n'+text:''),
       },
       "keyboard": {
         "type": "text"
@@ -452,7 +452,7 @@ function sideMessage(res, text) {
         "width": 358,
         "height": 259
       },
-      "text": "※ 사이드메뉴를 선택해 주세요" + (text?'\n'+text:''),
+      "text": "※ 사이드메뉴를 선택해 주세요\n(완료 시 \"선택완료\" 입력)" + (text?'\n'+text:''),
     },
     "keyboard": {
       "type": "text"
