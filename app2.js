@@ -105,7 +105,7 @@ app.post('/message', function(req, res) {
       user[user_key].status = STATUS.VIEW_ORDER;
       var currentOrder = connection.query(`SELECT * FROM order WHERE user_key=${user_key}`);
       if (currentOrder.length > 0) {
-        currentOrder = currentOrder[currentOrder.length-1].order.replace(/(")/g, '\'');
+        currentOrder = currentOrder[currentOrder.length-1].order.replace(/(enter)/g, '\n');
       } else {
         currentOrder = ''
       }
@@ -258,7 +258,7 @@ app.post('/message', function(req, res) {
       user[user_key].pay = resultContent[0]?resultContent:'카드';
       user[user_key].address = resultContent[1]?resultContent[1]:'전화 바랍니다';
       // 디비에 저장한다.
-      var orderMenu = getStringMenu(user_key).replace(/(')/g, '\"');
+      var orderMenu = getStringMenuNoEnter(user_key);
       console.log(orderMenu);
       connection.query('INSERT INTO order(`user_key`, `order`) VALUES (\''+user_key+'\', \''+orderMenu + '\')');
 
@@ -288,6 +288,57 @@ function getStringLastMenu(menu) {
     result += ']';
   }
   result += '\n';
+
+  return result;
+}
+
+function getStringMenuNoEnter(user_key) {
+  var result = '';
+  if(user[user_key]) {
+    if (user[user_key].menus.length > 0) {
+      result += '-------------------------enter'
+      if (user[user_key].address) {
+        result += '주소 : ' + user[user_key].address +'enter';
+      }
+      if (user[user_key].pay) {
+        result += '지불방법 : ' + user[user_key].pay +'enter';
+        result += '-------------------------enter'
+      }
+      result += '※ 주문목록enter'
+      user[user_key].menus.forEach((menu, index) => {
+        result += `${index+1}. ${menu.main}enter${menu.detail}-${menu.spicy}enter`;
+
+        if(menu.topping.length>0) {
+          result += '[ ';
+          menu.topping.forEach((topping, index) => {
+            if(index !== menu.topping.length-1) {
+              result += topping + ', ';
+            } else {
+              result += topping + ' ';
+            }
+          });
+          result += ']';
+        }
+        result += 'enter';
+      });
+    }
+
+    if (user[user_key].side.length > 0) {
+      result += 'enter※ 사이드메뉴enter'
+      user[user_key].side.forEach((sideName, index) => {
+          if(index !== user[user_key].side.length-1) {
+        result += sideName + ', ';
+        } else {
+          result += sideName + ' ';
+        }
+      });
+    }
+
+    if(result !== '') {
+      result += 'enter합계 : ' + user[user_key].price + '원enter';
+      result += '-------------------------'
+    }
+  }
 
   return result;
 }
