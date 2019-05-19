@@ -260,7 +260,7 @@ app.post('/message', function(req, res) {
       // 디비에 저장한다.
       var orderMenu = getStringMenuNoEnter(user_key);
       var count = connection.query('SELECT * FROM orders').length + 1;
-      connection.query(`INSERT INTO orders VALUES ('${count}', '${user_key}', '${orderMenu}')`);
+      connection.query(`INSERT INTO orders VALUES ('${count}', '${user_key}', '${orderMenu}', 'ready')`);
 
       delete user[user_key];
       initUser(user_key);
