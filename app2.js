@@ -723,7 +723,7 @@ function initUser(user_key) {
       ],
       side: [
       ],
-      lastMenu = {
+      lastMenu : {
         main: '',
         spicy: '',
         detail: '',
