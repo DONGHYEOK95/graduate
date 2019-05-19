@@ -49,12 +49,9 @@ app.listen(8080, function(){ // node app.js 8080포트(임시)를 통해 서버 
 });
 
 app.get('/changeOrder', function(req, res) { //데이터를 받는 양식 http메소드
-  console.log(req);
-  // var id = decodeURIComponent(req.body.id);
-  // var status = decodeURIComponent(req.body.status);
-  // console.log(id, status);
-  // connection.query(`UPDATE orders SET status = '${status}' WHERE id = ${id}`);
-  // var currentOrder = connection.query(`SELECT * FROM orders`);
+  var id = Number(req.query.id);
+  var status = req.query.status;
+  connection.query(`UPDATE orders SET status = '${status}' WHERE id = ${id}`);
 
   res.send(
   {
