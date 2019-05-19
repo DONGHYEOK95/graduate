@@ -258,7 +258,7 @@ app.post('/message', function(req, res) {
       user[user_key].pay = resultContent[0]?resultContent:'카드';
       user[user_key].address = resultContent[1]?resultContent[1]:'전화 바랍니다';
       // 디비에 저장한다.
-      var orderMenu = getStringMenu(user_key).replace(/(')/g, '\"');\
+      var orderMenu = getStringMenu(user_key).replace(/(')/g, '\"');
       console.log(orderMenu);
       connection.query('INSERT INTO order(`user_key`, `order`) VALUES (\''+user_key+'\', \''+orderMenu + '\')');
 
