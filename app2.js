@@ -259,8 +259,8 @@ app.post('/message', function(req, res) {
       user[user_key].address = resultContent[1]?resultContent[1]:'전화 바랍니다';
       // 디비에 저장한다.
       var orderMenu = getStringMenuNoEnter(user_key);
-      console.log(orderMenu);
-      connection.query('INSERT INTO order(`user_key`, `order`) VALUES (\''+user_key+'\', \"'+orderMenu + '\")');
+      var count = connection.query('SELECT * FROM order').length;
+      connection.query('INSERT INTO order VALUES ('+(count+1)+', \''+user_key+'\', \''+orderMenu + '\')');
 
       delete user[user_key];
       initUser(user_key);
