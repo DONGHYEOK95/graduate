@@ -56,13 +56,11 @@ app.get('/order', function(req, res) { //데이터를 받는 양식 http메소�
   });
 });
 
-app.post('/user', function(req, res) { //데이터를 받는 양식 http메소드
-  var user_key = decodeURIComponent(req.body.user_key);
-  var user = connection.query(`SELECT * FROM user WHERE userKey='${user_key}'`);
-  var currentOrder = connection.query(`SELECT * FROM orders WHERE user_key='${user_key}'`);
+app.get('/user', function(req, res) { //데이터를 받는 양식 http메소드
+  var users = connection.query(`SELECT * FROM orders`);
   res.send(
   {
-    "user": user
+    "user": users
   });
 });
 
