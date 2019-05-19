@@ -37,7 +37,8 @@ var STATUS = {
   ORDER_BURRITO: 8,
   SELECT_BURRITO_SPICY: 9,
   SELECT_HOTDOG_SPICY: 10,
-  ADD_BURRITO_TOPPING: 11
+  ADD_BURRITO_TOPPING: 11,
+  VIEW_ORDER: 12
 };
 
 app.use('/images', express.static('images'));
@@ -97,9 +98,23 @@ app.post('/message', function(req, res) {
     } else if (content == "2. 사이드 주문하기") {
       user[user_key].status = STATUS.ORDER_SIDE_MENU;
       sideMessage(res, '사이드 주문하기');
-    } else if (content == "3. 메뉴선택완료") {
+    } else if (content == "3. 메뉴 선택완료") {
       user[user_key].status = STATUS.ORDER_DONE;
       testMessage(res, '※ 주소와 결제방법을 입력해 주세요.\nex) 주소 : 멀티 M515\n결제방법 : 카드');
+    } else if (content == "4. 주문 현황 확인") {
+      user[user_key].status = STATUS.VIEW_ORDER;
+      var currentOrder = connection.query(`SELECT * FROM order WHERE user_key=${user_key}`);
+      if (currentOrder.length > 0) {
+        currentOrder = currentOrder[currentOrder.length-1].order;
+      } else {
+        currentOrder = ''
+      }
+      viewOrderMessage(res, currentOrder);
+    }
+  } else if(user[user_key].status == STATUS.VIEW_ORDER) {
+    if (content == "확인") {
+      user[user_key].status == STATUS.MAIN_MENU;
+      mainMenu(res);
     }
   } else if(user[user_key].status == STATUS.ORDER_MAIN_MENU) {
     if (content == "핫도그 (Hotdog)") {
@@ -238,8 +253,17 @@ app.post('/message', function(req, res) {
     }
   } else if(user[user_key].status == STATUS.ORDER_DONE) {
     if (user[user_key].menus.length > 0 || user[user_key].side.length > 0) {
+      var resultContent = content.split('\n');
       user[user_key].status = STATUS.MAIN_MENU;
-      orderDone(res, getStringMenu(user_key));
+      user[user_key].pay = resultContent[0]?resultContent:'카드';
+      user[user_key].address = resultContent[1]?resultContent[1]:'전화 바랍니다';
+      // 디비에 저장한다.
+      var orderMenu = getStringMenu(user_key);
+      connection.query('INSERT INTO order(`user_key`, `order`) VALUES (\''+user_key+'\', \''+orderMenu'\')');
+
+      delete user[user_key];
+      initUser(user_key);
+      orderDone(res, orderMenu);
     } else {
       user[user_key].status = STATUS.MAIN_MENU;
       orderFail(res);
@@ -272,6 +296,13 @@ function getStringMenu(user_key) {
   if(user[user_key]) {
     if (user[user_key].menus.length > 0) {
       result += '-------------------------\n'
+      if (user[user_key].address) {
+        result += '주소 : ' + user[user_key].address +'\n';
+      }
+      if (user[user_key].pay) {
+        result += '지불방법 : ' + user[user_key].pay +'\n';
+        result += '-------------------------\n'
+      }
       result += '※ 주문목록\n'
       user[user_key].menus.forEach((menu, index) => {
         result += `${index+1}. ${menu.main}\n${menu.detail}-${menu.spicy}\n`;
@@ -309,6 +340,27 @@ function getStringMenu(user_key) {
   }
 
   return result;
+}
+
+function viewOrderMessage(res, text) {
+  var answer = {
+    "message" : {
+      "photo": {
+        "url": "http://54.180.82.68:8080/images/MainLogo.jpg",
+        "width": 245,
+        "height": 180
+      },
+      "text": "※ 주문현황\n" + text?text:'',
+    },
+    "keyboard": {
+      "type": "buttons",
+      "buttons": [
+        "확인",
+      ]
+    }
+  };
+
+  res.send(answer);
 }
 
 function burritoDetailMessage(res, text) {
@@ -532,7 +584,8 @@ function orderFail(res,text) {
       "buttons": [
         "1. 메뉴 주문하기",
         "2. 사이드 주문하기",
-        "3. 메뉴선택완료"
+        "3. 메뉴 선택완료",
+        "4. 주문 현황 확인"
       ]
     }
   };
@@ -555,7 +608,7 @@ function orderDone(res,text) {
       "buttons": [
         "1. 메뉴 주문하기",
         "2. 사이드 주문하기",
-        "3. 메뉴선택완료"
+        "3. 메뉴 선택완료"
       ]
     }
   };
@@ -578,7 +631,7 @@ function mainMenu(res,text) {
       "buttons": [
         "1. 메뉴 주문하기",
         "2. 사이드 주문하기",
-        "3. 메뉴선택완료"
+        "3. 메뉴 선택완료"
       ]
     }
   };
@@ -617,7 +670,9 @@ function initUser(user_key) {
       side: [
 
       ],
-      price: 0
+      price: 0,
+      pay: '',
+      address: ''
     }
   }
 }
