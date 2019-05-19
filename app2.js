@@ -264,8 +264,7 @@ app.post('/message', function(req, res) {
 
       delete user[user_key];
       initUser(user_key);
-      orderMenu.replace(/(enter)/g, '\n');
-      orderDone(res, orderMenu);
+      orderDone(res, orderMenu.replace(/(enter)/g, '\n'));
     } else {
       user[user_key].status = STATUS.MAIN_MENU;
       orderFail(res);
