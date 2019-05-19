@@ -259,12 +259,12 @@ app.post('/message', function(req, res) {
       user[user_key].address = resultContent[1]?resultContent[1]:'전화 바랍니다';
       // 디비에 저장한다.
       var orderMenu = getStringMenuNoEnter(user_key);
-      var count = connection.query('SELECT * FROM orders');
-      console.log(`INSERT INTO orders VALUES ('${count}', '${user_key}', '${orderMenu}')`);
-      // connection.query(`INSERT INTO orders VALUES ('${count}', '${user_key}', '${orderMenu}')`);
+      var count = connection.query('SELECT * FROM orders').length + 1;
+      connection.query(`INSERT INTO orders VALUES ('${count}', '${user_key}', '${orderMenu}')`);
 
       delete user[user_key];
       initUser(user_key);
+      orderMenu.replace(/(enter)/g, '\n');
       orderDone(res, orderMenu);
     } else {
       user[user_key].status = STATUS.MAIN_MENU;
