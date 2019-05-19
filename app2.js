@@ -48,6 +48,14 @@ app.listen(8080, function(){ // node app.js 8080포트(임시)를 통해 서버 
   console.log('server is running');
 });
 
+app.get('/order', function(req, res) { //데이터를 받는 양식 http메소드
+  var currentOrder = connection.query(`SELECT * FROM orders WHERE user_key='${user_key}'`);
+  res.send(
+  {
+    "data": currentOrder
+  });
+});
+
 app.get('/keyboard', function(req, res) { //데이터를 받는 양식 http메소드
   res.send(
   {
