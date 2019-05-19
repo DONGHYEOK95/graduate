@@ -103,7 +103,7 @@ app.post('/message', function(req, res) {
       testMessage(res, '※ 주소와 결제방법을 입력해 주세요.\nex) 주소 : 멀티 M515\n결제방법 : 카드');
     } else if (content == "4. 주문 현황 확인") {
       user[user_key].status = STATUS.VIEW_ORDER;
-      var currentOrder = connection.query(`SELECT * FROM order WHERE user_key=${user_key}`);
+      var currentOrder = connection.query(`SELECT * FROM orders WHERE user_key='${user_key}'`);
       if (currentOrder.length > 0) {
         currentOrder = currentOrder[currentOrder.length-1].order.replace(/(enter)/g, '\n');
       } else {
@@ -259,9 +259,9 @@ app.post('/message', function(req, res) {
       user[user_key].address = resultContent[1]?resultContent[1]:'전화 바랍니다';
       // 디비에 저장한다.
       var orderMenu = getStringMenuNoEnter(user_key);
-      var count = connection.query('SELECT * FROM order');
-      console.log(`INSERT INTO order VALUES ('${count}', '${user_key}', '${orderMenu}')`);
-      // connection.query(`INSERT INTO order VALUES ('${count}', '${user_key}', '${orderMenu}')`);
+      var count = connection.query('SELECT * FROM orders');
+      console.log(`INSERT INTO orders VALUES ('${count}', '${user_key}', '${orderMenu}')`);
+      // connection.query(`INSERT INTO orders VALUES ('${count}', '${user_key}', '${orderMenu}')`);
 
       delete user[user_key];
       initUser(user_key);
