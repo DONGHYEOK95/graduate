@@ -73,6 +73,8 @@ app.post('/message', function(req, res) {
   } else if (!isAgree[0] && user[user_key] && user[user_key].status == STATUS.PRIVATE_INFO_AGREE_FLOW) {
     var info = privateInfo(content);
     connection.query(`INSERT INTO user VALUES ('${user_key}', '${info.name}', '${info.phone}', 'true')`);
+    user[user_key].status == STATUS.MAIN_MENU;
+    delete user[user_key];
     mainMenu(res);
   } else if (!isAgree[0] || isAgree && isAgree[0] && isAgree[0].agree !== 'true') {
     if (content == '개인정보 이용 동의') {
